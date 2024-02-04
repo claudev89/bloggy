@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
+            $table->string('titulo', 100);
             $table->string('description', 500);
             $table->string('image', 255);
             $table->text('body');
             $table->unsignedBigInteger('autor')->nullable();
-            $table->boolean('borrador');
+            $table->boolean('borrador')->default(0);
             $table->timestamps();
 
             $table->foreign('autor')
