@@ -22,7 +22,7 @@
             <div class="container">
                 <button onclick="cambiarTema()" class="btn rounded-fill"><i id="dl-icon" class="bi bi-sun-fill"></i> </button>
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    <img src="/images/bg.png" alt="app.name" width="24" height="24">  {{ config('app.name', 'Laravel') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -50,6 +50,7 @@
                                 </li>
                             @endif
                        @endforeach
+                           <a class="nav-link" href="{{ route('contacto.index') }}">Contacto</a>
 
                     </ul>
                     <form class="d-flex" role="search">
@@ -96,9 +97,19 @@
             </div>
         </nav>
 
-        <main class="py-4">
-            @yield('content')
-        </main>
+        <div class="container bg-warning mt-3">
+            <div class="row">
+
+                <!-- Contenido principal de la página -->
+                <div class="col-md-9 bg-primary">
+                    <h1>HOLaaaaa</h1>
+                    @yield('content')
+                </div>
+
+                <!-- Barra lateral derecha -->
+                <div class="col-md-3 bg-light">Contenedor 3</div>
+            </div>
+        </div>
     </div>
 </body>
 

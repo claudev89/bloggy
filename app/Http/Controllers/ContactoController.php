@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Category;
 
-class WelcomeController extends Controller
+class ContactoController extends Controller
 {
     public function index()
     {
-        //
+        return view('contacto.index');
     }
 }
