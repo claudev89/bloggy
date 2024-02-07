@@ -30,9 +30,32 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
+
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                       @foreach($categories as $category)
+                           @if($category->subcategory->isNotEmpty())
+                                <li class="nav-item dropdown" onclick="window.location.href='{{ route('categories.show', $category) }}'">
+                                    <a class="nav-link dropdown-toggle" href="{{ route('categories.show', $category) }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        {{ $category->name }}
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        @foreach($category->subcategory as $subcategory)
+                                            <li><a class="dropdown-item" href="{{ route('categories.show', $subcategory) }}">{{ $subcategory->name }}</a></li>
+                                        @endforeach
+                                    </ul>
+                                </li>
+                            @else
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('categories.show', $category) }}">{{ $category->name }}</a>
+                                </li>
+                            @endif
+                       @endforeach
 
                     </ul>
+                    <form class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-light" type="submit">Search</button>
+                    </form>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
@@ -78,6 +101,7 @@
         </main>
     </div>
 </body>
+
 <script>
     const temaOscuro = () => {
         document.querySelector("body").setAttribute("data-bs-theme", "dark");
@@ -93,4 +117,15 @@
         document.querySelector("body").getAttribute("data-bs-theme") === "dark"? temaClaro() : temaOscuro();
     }
 </script>
+
+<style>
+    .dropdown:hover>.dropdown-menu {
+        display: block;
+    }
+
+    .dropdown>.dropdown-toggle:active {
+        /*Without this, clicking will make it sticky*/
+        pointer-events: none;
+    }
+</style>
 </html>

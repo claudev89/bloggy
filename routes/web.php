@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,12 +16,11 @@ use App\Http\Controllers\PostController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [CategoryController::class, 'index']);
 
 Route::resource('posts', PostController::class);
 Route::resource('tags', TagController::class)->except(['index', 'show']);
+Route::resource('categories', CategoryController::class);
 
 Route::middleware([
     'auth:sanctum',
