@@ -17,7 +17,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::where('borrador', 0)->paginate(self::NUMBER_OF_ITEMS_PER_PAGE);
-        return view('post.index', compact('posts'));
+        return view('welcome', compact('posts'));
     }
 
     /**

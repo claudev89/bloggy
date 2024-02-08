@@ -22,7 +22,7 @@ Route::get('/', [CategoryController::class, 'index']);
 Route::resource('posts', PostController::class);
 Route::resource('tags', TagController::class)->except(['index', 'show']);
 Route::resource('categories', CategoryController::class);
-Route::resource('contacto', ContactoController::class)->only(['index', 'store']);
+Route::resource('contacto', ContactoController::class)->only(['index', 'store', 'enviar-formulario']);
 
 Route::middleware([
     'auth:sanctum',

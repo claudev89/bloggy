@@ -32,6 +32,7 @@
                     <!-- Left Side Of Navbar -->
 
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        @php($categories = \App\Models\Category::whereNull('parentCategory')->get())
                        @foreach($categories as $category)
                            @if($category->subcategory->isNotEmpty())
                                 <li class="nav-item dropdown" onclick="window.location.href='{{ route('categories.show', $category) }}'">
@@ -97,17 +98,25 @@
             </div>
         </nav>
 
-        <div class="container bg-warning mt-3">
+        <div class="container mt-3">
             <div class="row">
 
                 <!-- Contenido principal de la página -->
-                <div class="col-md-9 bg-primary">
-                    <h1>HOLaaaaa</h1>
+                <div class="col-md-9">
                     @yield('content')
                 </div>
 
                 <!-- Barra lateral derecha -->
-                <div class="col-md-3 bg-light">Contenedor 3</div>
+                <div class="col-md-3 bg-warning">
+                wewewe
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <!-- Contenido del footer -->
+                <div class="container bg-light">
+                    footer
+                </div>
             </div>
         </div>
     </div>
