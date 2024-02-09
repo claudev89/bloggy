@@ -1,34 +1,55 @@
 @extends('layouts.app')
 
 @section('content')
-    @php($posts = \App\Models\Post::where('borrador', 0)->paginate(15))
+    @php($posts = \App\Models\Post::where('borrador', 0)->orderBy('created_at', 'desc')->paginate(15))
     @foreach($posts as $post)
-        <a href="{{ route('posts.show', $post) }}" style="text-decoration: none">
-            <div class="card mb-2 mt-2">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="{{ $post->image }}" class="img-fluid rounded-start" alt="{{ $post->titulo }}">
-                    </div>
-                    <div class="col-md-5" style="width: 66%;">
-                        <div class="card-body">
-                            <h4 class="card-title">{{ $post->titulo }}</h4>
-                            <p class="card-text crop-text-3">{{ $post->description }}</p>
-                            <p class="card-text"><small class="text-body-secondary">{{ date('d/m/Y', strtotime($post->created_at)) }}</small></p>
+        <div class="card mb-2 mt-2">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <a href="{{ route('posts.show', $post) }}"><img src="{{ $post->image }}" class="img-fluid rounded" alt="{{ $post->titulo }}"></a>
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <a style="text-decoration: none; color: inherit" href="{{ route('posts.show', $post )}}"><h4
+                                class="card-title">{{ $post->titulo }}</h4></a>
+                        <small
+                            class="d-inline-flex mb-2 px-2 py-1 fw-semibold text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-2">
+                            {{ date('d/m/Y', strtotime($post->created_at)) }}
+                        </small>
+                        <text class="text-body-secondary">Posteado por
+                            <a style="text-decoration: none; color: inherit"
+                               href="{{ route('users.show', $post->user ) }}">{{ $post->user->name }}</a>
+                            en <a style="text-decoration: none; color: inherit"
+                                  href="{{ route('categories.show', $post->categories->first() ) }}">{{ $post->categories->first()->name }} </a>
+                        </text>
+                        <div class="row">
+                            <p class="crop-text-2 col-9 col-md-10">{{ $post->description }}</p>
+                            <div class="col-1">
+                                <i class="bi bi-heart"></i> <br>8</br>
+                            </div>
+                            <div class="col-1">
+                                <i class="bi bi-chat-square"></i> <br>7</br>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </a>
+        </div>
     @endforeach
 
     {{ $posts->links() }}
 
+    <hr>
+    <div class="container">
+        ESCRIBIR EL FORMULARIO DE SUCRIPCIÓN
+    </div>
+
 @endsection
 
 <style>
-    .crop-text-3 {
-        -webkit-line-clamp: 3;
-        overflow : hidden;
+    .crop-text-2 {
+        -webkit-line-clamp: 2;
+        overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-box-orient: vertical;

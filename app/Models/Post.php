@@ -10,9 +10,9 @@ class Post extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function User()
+    public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'autor');
     }
 
     public function likes()

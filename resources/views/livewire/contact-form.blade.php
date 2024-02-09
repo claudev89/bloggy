@@ -2,7 +2,7 @@
     @if(session()->has('success'))
         <div class=" alert alert-success" role="alert">{{ session('success') }}</div>
     @endif
-    <form wire:submit.prevent="submit" class="mt-4 needs-validation" method="post" action="{{ route('contacto.store') }}" novalidate>
+    <form wire:submit.prevent="submit" class="mt-4 mb-4 needs-validation" method="post" action="{{ route('contacto.store') }}" novalidate>
         @csrf
         <div class="mb-3">
             <label for="name" class="form-label">Nombre</label>
