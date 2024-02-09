@@ -6,6 +6,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SuscripcionController;
 
 /*
 |--------------------------------------------------------------------------

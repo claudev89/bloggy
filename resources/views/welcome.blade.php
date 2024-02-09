@@ -41,7 +41,7 @@
 
     <hr>
     <div class="container">
-        ESCRIBIR EL FORMULARIO DE SUCRIPCIÓN
+        @livewire('suscripcionComponent')
     </div>
 
 @endsection
