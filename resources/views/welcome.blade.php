@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+    @if(session()->has('suscrito'))
+        <div class="alert alert-success" role="alert">{{ session('suscrito') }}</div>
+    @endif
+    @if(session()->has('noSuscrito'))
+        <div class="alert alert-danger" role="alert">{{ session('noSuscrito') }}</div>
+    @endif
     @php($posts = \App\Models\Post::where('borrador', 0)->orderBy('created_at', 'desc')->paginate(15))
     @foreach($posts as $post)
         <div class="card mb-2 mt-2">

@@ -9,4 +9,9 @@ class Suscripcion extends Model
 {
     use HasFactory;
     protected $fillable = ['correo'];
+
+    public function token()
+    {
+        return $this->hasOne(SuscripcionToken::class);
+    }
 }

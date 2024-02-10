@@ -26,7 +26,7 @@
             <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
-        <button type="submit" class="btn btn-light">Enviar</button>
+        <button type="submit" class="btn btn-outline-light">Enviar</button>
     </form>
 
 </div>

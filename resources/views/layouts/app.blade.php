@@ -232,5 +232,6 @@
         /*Without this, clicking will make it sticky*/
         pointer-events: none;
     }
+
 </style>
 </html>
