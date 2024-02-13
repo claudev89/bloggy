@@ -16,12 +16,14 @@ class ContactoMailable extends Mailable
     public $name;
     public $email;
     public $messageContent;
+    public $subject;
 
     /**
      * Create a new message instance.
      */
     public function __construct($name, $email, $messageContent)
     {
+        $this->subject = $name." (".$email.") te ha contactado";
         $this->name = $name;
         $this->email = $email;
         $this->messageContent = $messageContent;

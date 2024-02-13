@@ -200,8 +200,18 @@
                 <!-- Fin de la barra latetal derecha -->
             </div>
         </div>
-        <div class="bg-light">
-            footer
+
+        <div class="container mb-3">
+            <hr>
+            <div class="row align-content-center">
+                <div class="btn-group" role="group" aria-label="Footer Menu" id="footerMenu">
+                    <button onclick="location.href = '/'" class="btn btn-outline-light">Inicio</button>
+                    @foreach($categories as $category)
+                        <button onclick="location.href = '{{ route('categories.show', $category) }}'" type="button" class="btn btn-outline-light">{{ $category->name }}</button>
+                    @endforeach
+                    <button onclick="location.href = '{{ route('contacto.index') }}'" type="button" class="btn btn-outline-light">Contacto</button>
+                </div>
+        </div>
         </div>
     </div>
 </div>
@@ -232,6 +242,13 @@
         /*Without this, clicking will make it sticky*/
         pointer-events: none;
     }
+
+    @media screen and (max-width: 768px) {
+        #footerMenu{
+            display: inline-grid;}
+        }
+
+
 
 </style>
 </html>

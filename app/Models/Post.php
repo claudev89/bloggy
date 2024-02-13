@@ -17,7 +17,7 @@ class Post extends Model
 
     public function likes()
     {
-        return $this->morphMany(Like::class, 'likeabke');
+        return $this->morphMany(Like::class, 'likeable');
     }
 
     public function tags()
@@ -28,5 +28,10 @@ class Post extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    public function comentarios()
+    {
+        return $this->hasMany(Comentario::class);
     }
 }

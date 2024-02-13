@@ -26,7 +26,14 @@
             <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
-        <button type="submit" class="btn btn-outline-light">Enviar</button>
+        <button type="submit" class="btn btn-outline-light" wire:click.prevent="submit" wire:loading.attr="disabled">
+            <span wire:loading.remove>Enviar</span>
+            <span wire:loading wire:target="submit">
+                <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                <span role="status">Enviando...</span>
+            </span>
+        </button>
+
     </form>
 
 </div>

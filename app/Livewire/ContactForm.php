@@ -11,6 +11,7 @@ class ContactForm extends Component
     public $name;
     public $email;
     public $messageContent;
+    public $showSpinner = false;
 
     protected $rules = [
 
@@ -21,11 +22,14 @@ class ContactForm extends Component
 
     public function submit()
     {
+        $this->showSpinner = true;
         $this->validate();
 
         Mail::to('03e8b74cbc-d4644b@inbox.mailtrap.io')->send(new ContactoMailable($this->name, $this->email, $this->messageContent));
         session()->flash('success', "Tu mensaje fue enviado correctamente. Gracias por comunicarte con nosotros, nos pondremos en contacto a la brevedad.");
         $this->reset();
+
+        $this->showSpinner = false;
     }
     public function render()
     {

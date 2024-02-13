@@ -8,22 +8,19 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\View\View;
+use App\Models\Suscripcion;
 
-class SuscripcionMailable extends Mailable
+class DeleteSubscriptionNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $token;
-    public $correo;
-
+    public $subscription;
     /**
      * Create a new message instance.
      */
-    public function __construct($token, $correo)
+    public function __construct(Suscripcion $subscription)
     {
-        $this->token = $token;
-        $this->correo = $correo;
+        $this->subscription = $subscription;
     }
 
     /**
@@ -32,7 +29,7 @@ class SuscripcionMailable extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Solicitud de suscripción a '. config('app.name'),
+            subject: 'Su solicitud de suscripción ha sido eliminada por inactividad',
         );
     }
 
@@ -42,7 +39,7 @@ class SuscripcionMailable extends Mailable
     public function content(): Content
     {
         return new Content(
-            'correo-token'
+            view: 'subscriptions.expired-mail',
         );
     }
 

@@ -23,18 +23,22 @@
                             {{ date('d/m/Y', strtotime($post->created_at)) }}
                         </small>
                         <text class="text-body-secondary">Posteado por
-                            <a style="text-decoration: none; color: inherit"
-                               href="{{ route('users.show', $post->user ) }}">{{ $post->user->name }}</a>
+                            @if($post->user)
+                                <a style="text-decoration: none; color: inherit"
+                                   href="{{ route('users.show', $post->user ) }}">{{ $post->user->name }}</a>
+                            @else
+                                usuario eliminado
+                            @endif
                             en <a style="text-decoration: none; color: inherit"
                                   href="{{ route('categories.show', $post->categories->first() ) }}">{{ $post->categories->first()->name }} </a>
                         </text>
                         <div class="row">
                             <p class="crop-text-2 col-9 col-md-10">{{ $post->description }}</p>
                             <div class="col-1">
-                                <i class="bi bi-heart"></i> <br>8</br>
+                                <i class="bi bi-heart"></i> <br>{{ $post->likes->count() }}</br>
                             </div>
                             <div class="col-1">
-                                <i class="bi bi-chat-square"></i> <br>7</br>
+                                <i class="bi bi-chat-square"></i> <br>{{ $post->comentarios->count() }}</br>
                             </div>
                         </div>
                     </div>
