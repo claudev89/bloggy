@@ -20,4 +20,9 @@ class Comentario extends Model
     {
         return $this->morphMany(Like::class, 'likeabke');
     }
+
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
 }

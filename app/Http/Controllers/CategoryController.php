@@ -13,7 +13,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::whereNull('parentCategory')->get();
-        return view('welcome', compact('categories'));
+        return view('welcome');
     }
 
     /**

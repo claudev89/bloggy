@@ -5,6 +5,8 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactoController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\SuscripcionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +24,9 @@ Route::get('/', [CategoryController::class, 'index']);
 Route::resource('posts', PostController::class);
 Route::resource('tags', TagController::class)->except(['index', 'show']);
 Route::resource('categories', CategoryController::class);
-Route::resource('contacto', ContactoController::class)->only(['index', 'store']);
+Route::resource('contacto', ContactoController::class)->only(['index', 'store', 'enviar-formulario']);
+Route::resource('users', UserController::class);
+Route::get('/confirmar-suscripcion/{token}', [SuscripcionController::class, 'confirmSuscription']);
 
 Route::middleware([
     'auth:sanctum',

@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\DeleteExpiredSuscriptions;
+use App\Events\SuscripcionTokenCreated;
+use App\Listeners\SendSuscripcionConfirmationEmail;
+use App\Listeners\SendSuscriptionExpiredNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,6 +22,10 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        SuscripcionTokenCreated::class => [
+            SendSuscripcionConfirmationEmail::class
+        ],
+        DeleteExpiredSuscriptions::class => [SendSuscriptionExpiredNotification::class],
     ];
 
     /**

@@ -12,13 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('likes', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('usuario');
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('likeable_id');
             $table->string('likeable_type', 1);
 
-            $table->foreign('usuario')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->index(['likeable_id', 'likeable_type']);
+
+            $table->primary(['user_id', 'likeable_id', 'likeable_type']);
         });
     }
 

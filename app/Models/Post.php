@@ -10,14 +10,14 @@ class Post extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function User()
+    public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'autor');
     }
 
     public function likes()
     {
-        return $this->morphMany(Like::class, 'likeabke');
+        return $this->morphMany(Like::class, 'likeable');
     }
 
     public function tags()
@@ -28,5 +28,10 @@ class Post extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    public function comentarios()
+    {
+        return $this->hasMany(Comentario::class);
     }
 }
