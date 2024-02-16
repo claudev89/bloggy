@@ -116,11 +116,13 @@
 
             <!-- Contenido principal de la página -->
             <div class="col-md-9">
+                <div class="card p-3">
                 @yield('content')
+                </div>
             </div>
 
             <!-- Barra lateral derecha -->
-            <div class="col-md-3 mt-2">
+            <div class="col-md-3 pt-3 card">
                 <nav>
                     <div class="nav nav-tabs" id="3postsBLD" role="tablist">
                         <button class="nav-link active" id="nav-recents-tab" data-bs-toggle="tab" data-bs-target="#nav-recents" type="button" role="tab" aria-controls="nav-recents" aria-selected="true" style="color: inherit">Recientes</button>
@@ -197,6 +199,7 @@
                     @endforeach
                     <li ><a style="color: inherit" class="text-decoration-none" href="{{ route('contacto.index') }}">Contacto</a></li>
                 </ul>
+            </div>
                 <!-- Fin de la barra latetal derecha -->
             </div>
         </div>
