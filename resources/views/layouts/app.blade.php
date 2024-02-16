@@ -140,7 +140,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="card-body">
-                                            <a style="color: inherit; text-decoration: none" href="{{ route('posts.show', $post) }}"><h5 class="card-title">{{ $post->titulo }}</h5></a>
+                                            <a style="color: inherit; text-decoration: none" href="{{ route('posts.show', $post) }}"><h6 class="card-title">{{ $post->titulo }}</h6></a>
                                             <p class="card-text"><small class="text-body-secondary">{{ date('d/m/Y', strtotime($post->created_at)) }}</small></p>
                                         </div>
                                     </div>
@@ -157,7 +157,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="card-body">
-                                            <a style="color: inherit; text-decoration: none" href="{{ route('posts.show', $post) }}"><h5 class="card-title">{{ $post->titulo }}</h5></a>
+                                            <a style="color: inherit; text-decoration: none" href="{{ route('posts.show', $post) }}"><h6 class="card-title">{{ $post->titulo }}</h6></a>
                                             <p class="card-text"><small class="text-body-secondary">{{ date('d/m/Y', strtotime($post->created_at)) }}</small></p>
                                         </div>
                                     </div>
@@ -174,7 +174,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <div class="card-body">
-                                            <a style="color: inherit; text-decoration: none" href="{{ route('posts.show', $post) }}"><h5 class="card-title">{{ $post->titulo }}</h5></a>
+                                            <a style="color: inherit; text-decoration: none" href="{{ route('posts.show', $post) }}"><h6 class="card-title">{{ $post->titulo }}</h6></a>
                                             <p class="card-text"><small class="text-body-secondary">{{ date('d/m/Y', strtotime($post->created_at)) }}</small></p>
                                         </div>
                                     </div>
