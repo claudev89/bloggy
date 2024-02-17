@@ -4,9 +4,7 @@
 
     <h2 class="text-uppercase">{{ $post->titulo }}</h2>
 
-    <nav
-        style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);"
-        aria-label="breadcrumb">
+    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">Inicio</a></li>
             @if( $post->categories->first()->parentCategory )
@@ -40,8 +38,7 @@
             </div>
         </div>
         @if($post->user)
-            <div class="col-md-2 justify-content-center"
-                 onclick="window.location.href='{{route('users.show', $post->user)}}'" style="cursor: pointer">
+            <div class="col-md-2 justify-content-center" onclick="window.location.href='{{route('users.show', $post->user)}}'" style="cursor: pointer">
                 <img src="{{ $post->user->profile_photo_path }}" width="60" height="60" class="rounded-circle"><br>
                 {{ $post->user->name }}
             </div>
@@ -52,102 +49,156 @@
             </div>
         @endif
     </div>
-    @auth()
-        <hr>
-        <div class="container align-content-end">
-            <form>
-                <div class="form-floating mb-3">
-                    <textarea class="form-control" placeholder="Deje su comentario aquí" id="comentario"
-                              style="height: 100px"></textarea>
-                    <label for="floatingTextarea">Dejar un comentario</label>
-                </div>
-                <div class="row justify-content-end">
-                    <button type="submit" class="btn btn-outline-light col-md-3 me-3 col-5">Comentar</button>
-                </div>
-            </form>
-        </div>
-            @endauth
 
-            <hr>
-            <h2>Comentarios:</h2>
+    <div class="container py-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-12 col-md-10">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h4 class="text-center pb-2">Comentarios</h4>
 
-            @if($post->comentarios->isNotEmpty())
-                @foreach($post->comentarios->sortByDesc('created_at') as $comentario)
-                    @if(is_null($comentario->respuestaA))
-                        <div class="card mb-3">
-                            <h5 class="card-header">
-                                @if($comentario->autor)
-                                    <a href="{{ route('users.show', $comentario->user) }}"
-                                       style="text-decoration: none; color: inherit">
-                                        <img src="{{ $comentario->user->profile_photo_path }}" width="25" height="25"
-                                             class="rounded-3"> {{ $comentario->user->name }}
-                                    </a>
-                                    comentó el {{ date('d/m/Y', strtotime($comentario->created_at)) }}:
+                        <div class="row">
+                            <div class="col">
+                                <!-- Comentarios -->
+                                @if($post->comentarios->isNotEmpty())
+                                    @foreach($post->comentarios->sortByDesc('created_at') as $comentario)
+                                        @if(is_null($comentario->respuestaA))
+                                            @if($comentario->user->profile_photo_path)
+                                                @php($profile_photo_url = $comentario->user->profile_photo_path)
+                                            @else
+                                                @php($profile_photo_url = '/images/pp.webp')
+                                            @endif
+                                            @if($comentario->user)
+                                                @php($author_name = $comentario->user->name)
+                                            @else
+                                                @php($author_name = "<i>Cuenta Eliminada</i>")
+                                            @endif
+                                            <div class="d-flex flex-start mt-4">
+                                                <img class="rounded-circle shadow-1-strong me-3"
+                                                     src="{{ $profile_photo_url }}" alt="{{ $author_name }}" width="65"
+                                                     height="65" />
+                                                <div class="flex-grow-1 flex-shrink-1">
+                                                    <div>
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <p class="mb-1">
+                                                                {{ $author_name }}<span class="small"> - 2 hours ago</span>
+                                                            </p>
+                                                            <div>
+                                                                <a href="#!" style="text-decoration: none; color: inherit"><i class="bi bi-reply me-1"></i><span class="small"> Responder</span></a>
+                                                                @if($comentario->likes->count() >0)
+                                                                    <i class="bi bi-heart ms-2" style="font-style: normal"> {{ $comentario->likes->count() }}</i>
+                                                                @else
+                                                                    <i class="bi bi-heart ms-2"></i>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                        <p class="small mb-0">
+                                                            {{ $comentario->cuerpo }}
+                                                        </p>
+                                                    </div>
+                                                    <!-- Fin comentario -->
+
+                                                    <!-- Inicio respuestas -->
+                                                    @foreach($comentario->respuesta as $respuesta)
+                                                        @if($comentario->id == $respuesta->respuestaA)
+                                                            @if(($respuesta->user->profile_photo_path))
+                                                                @php($profile_photo_url = $respuesta->user->profile_photo_path)
+                                                            @else
+                                                                @php($profile_photo_url = '/images/pp.webp')
+                                                            @endif
+                                                            @if($respuesta->user)
+                                                                @php($author_name = $respuesta->user->name)
+                                                            @else
+                                                                @php($author_name = "<i>Cuenta Eliminada</i>")
+                                                            @endif
+
+                                                            <div class="d-flex flex-start mt-4">
+                                                                @if($respuesta->user)
+                                                                    <a class="me-3" href="{{ route('users.show', $respuesta->user) }}">
+                                                                        <img class="rounded-circle shadow-1-strong"
+                                                                             src="{{ $profile_photo_url }}" alt="{{ $author_name }}"
+                                                                             width="65" height="65" />
+                                                                    </a>
+                                                                @else
+                                                                    <img class="rounded-circle shadow-1-strong"
+                                                                         src="{{ $profile_photo_url }}" alt="{{ $author_name }}"
+                                                                         width="65" height="65" />
+                                                                @endif
+                                                                <div class="flex-grow-1 flex-shrink-1">
+                                                                    <div>
+                                                                        <div class="d-flex justify-content-between align-items-center">
+                                                                            <p class="mb-1">
+                                                                                {{ $author_name }} <span class="small">- 3 hours ago</span>
+                                                                            </p>
+                                                                            @if($respuesta->likes->count() > 0)
+                                                                                <i class="bi bi-heart" style="font-style: normal"> {{ $respuesta->likes->count() }}</i>
+                                                                            @else
+                                                                                <i class="bi bi-heart" style="font-style: normal"></i>
+                                                                            @endif
+                                                                        </div>
+                                                                        <p class="small mb-0">
+                                                                            {{ $respuesta->cuerpo }}
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endforeach
                                 @else
-                                    <img src="" width="25" height="25" class="rounded-3"><i>Cuenta Eliminada</i>
-                                    comentó el {{ date('d/m/Y', strtotime($comentario->created_at)) }}:
+                                    <div class="alert alert-dark">
+                                        Todavía no hay comentarios. @auth Sé el primero en dejar uno. @endauth
+                                    </div>
                                 @endif
-                            </h5>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-9 col-md-10">
-                                        <p class="card-text">{{ $comentario->cuerpo }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @auth()
+        <div class="container text-dark">
+            <div class="row d-flex justify-content-center">
+                <div class="col-12 col-md-10">
+                    <div class="card">
+                        <div class="card-body p-4">
+                            <div class="d-flex flex-start w-100">
+                                <img class="rounded-circle shadow-1-strong me-3"
+                                     src="@if(is_null(auth()->user()->profile_photo_path)) /images/pp.webp @else(auth()->user()->profile_photo_path) @endif" alt="{{auth()->user()->name}}"
+                                     width="65"
+                                     height="65"/>
+                                <div class="w-100">
+                                    <h5>Deja un comentario</h5>
+                                    <div class="form-outline">
+                                        <textarea class="form-control" id="comentario" rows="4"></textarea>
                                     </div>
-                                    <div class="col-1">
-                                        <div class="d-flex flex-column align-items-center">
-                                            <i class="bi bi-heart"></i>
-                                            <span>{{ $comentario->likes->count() }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-1">
-                                        <i class="bi bi-chat-square"></i>
+                                    <div class="d-flex justify-content-end mt-3">
+                                        <button type="button" class="btn btn-outline-light">
+                                            Comentar <i class="fas fa-long-arrow-alt-right ms-1"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            @foreach($comentario->respuesta as $respuesta)
-                                @if($comentario->id == $respuesta->respuestaA)
-                                    <div class="card mb-3 me-4 ms-4 mb-2">
-                                        <h5 class="card-header">
-                                            @if($respuesta->autor)
-                                                <a href="{{ route('users.show', $respuesta->user) }}"
-                                                   style="text-decoration: none; color: inherit">
-                                                    @if( is_null($respuesta->user->profile_photo_path))
-                                                        <img src="/images/pp.webp" width="25" height="25"
-                                                             class="rounded-3"> {{ $respuesta->user->name }}
-                                                    @else
-                                                        <img src="{{ $respuesta->user->profile_photo_path }}" width="25"
-                                                             height="25" class="rounded-3"> {{ $respuesta->user->name }}
-                                                    @endif
-                                                </a>
-                                                comentó el {{ date('d/m/Y', strtotime($respuesta->created_at)) }}:
-                                            @else
-                                                <img src="" width="25" height="25" class="rounded-3"><i>Cuenta
-                                                    Eliminada</i>
-                                                comentó el {{ date('d/m/Y', strtotime($respuesta->created_at)) }}:
-                                            @endif
-                                        </h5>
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-9 col-md-11">
-                                                    <p class="card-text">{{ $respuesta->cuerpo }}</p>
-                                                </div>
-                                                <div class="col-1">
-                                                    <div class="d-flex flex-column align-items-center">
-                                                        <i class="bi bi-heart"></i>
-                                                        <span>{{ $respuesta->likes->count() }}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-                            @endforeach
-
                         </div>
-                    @endif
-                @endforeach
-            @else
-                Todavía no hay comentarios, sé el primero en comentar.
-    @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endauth
 
 @endsection
+
+<style>
+    .link-muted {
+        color: #aaa;
+    }
+
+    .link-muted:hover {
+        color: #fff;
+    }
+</style>
