@@ -74,21 +74,21 @@
                                                 @php($author_name = "<i>Cuenta Eliminada</i>")
                                             @endif
                                             <div class="d-flex flex-start mt-4">
-                                                <img class="rounded-circle shadow-1-strong me-3"
+                                                <img class="rounded-circle shadow-1-strong me-1 me-md-3 profile_pct"
                                                      src="{{ $profile_photo_url }}" alt="{{ $author_name }}" width="65"
                                                      height="65" />
                                                 <div class="flex-grow-1 flex-shrink-1">
                                                     <div>
                                                         <div class="d-flex justify-content-between align-items-center">
                                                             <p class="mb-1">
-                                                                {{ $author_name }}<span class="small"> - 2 hours ago</span>
+                                                                {{ $author_name }}<span class="small text-secondary d-block d-md-inline"> - 2 hours ago</span>
                                                             </p>
                                                             <div>
-                                                                <a href="#!" style="text-decoration: none; color: inherit"><i class="bi bi-reply me-1"></i><span class="small"> Responder</span></a>
+                                                                <a href="#!" style="text-decoration: none; color: inherit"><i class="bi bi-reply me-1"></i><span class="small d-block d-md-inline d-none">Responder</span></a>
                                                                 @if($comentario->likes->count() >0)
-                                                                    <i class="bi bi-heart ms-2" style="font-style: normal"> {{ $comentario->likes->count() }}</i>
+                                                                    <i class="bi bi-heart ms-2" style="font-style: normal"> {{ $comentario->likes->count() }} </i>
                                                                 @else
-                                                                    <i class="bi bi-heart ms-2"></i>
+                                                                    <i class="bi bi-heart ms-2"><br></i>
                                                                 @endif
                                                             </div>
                                                         </div>
@@ -115,12 +115,12 @@
                                                             <div class="d-flex flex-start mt-4">
                                                                 @if($respuesta->user)
                                                                     <a class="me-3" href="{{ route('users.show', $respuesta->user) }}">
-                                                                        <img class="rounded-circle shadow-1-strong"
+                                                                        <img class="rounded-circle shadow-1-strong profile_pct"
                                                                              src="{{ $profile_photo_url }}" alt="{{ $author_name }}"
                                                                              width="65" height="65" />
                                                                     </a>
                                                                 @else
-                                                                    <img class="rounded-circle shadow-1-strong"
+                                                                    <img class="rounded-circle shadow-1-strong profile_pct"
                                                                          src="{{ $profile_photo_url }}" alt="{{ $author_name }}"
                                                                          width="65" height="65" />
                                                                 @endif
@@ -128,7 +128,7 @@
                                                                     <div>
                                                                         <div class="d-flex justify-content-between align-items-center">
                                                                             <p class="mb-1">
-                                                                                {{ $author_name }} <span class="small">- 3 hours ago</span>
+                                                                                {{ $author_name }}<span class="small text-secondary d-block d-md-inline"> - 2 hours ago</span>
                                                                             </p>
                                                                             @if($respuesta->likes->count() > 0)
                                                                                 <i class="bi bi-heart" style="font-style: normal"> {{ $respuesta->likes->count() }}</i>
@@ -168,7 +168,7 @@
                     <div class="card">
                         <div class="card-body p-4">
                             <div class="d-flex flex-start w-100">
-                                <img class="rounded-circle shadow-1-strong me-3"
+                                <img class="rounded-circle shadow-1-strong me-3 profile_pct"
                                      src="@if(is_null(auth()->user()->profile_photo_path)) /images/pp.webp @else(auth()->user()->profile_photo_path) @endif" alt="{{auth()->user()->name}}"
                                      width="65"
                                      height="65"/>
@@ -200,5 +200,12 @@
 
     .link-muted:hover {
         color: #fff;
+    }
+
+    @media (max-width: 576px) {
+        .profile_pct {
+            width: 20px;
+            height: 20px;
+        }
     }
 </style>
