@@ -42,10 +42,9 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        $postSelect = Post::find($post);
-        $postSelect->views++;
-        $postSelect->save();
-        return view('post.show', ['post' => $post]);
+        $post->views++;
+        $post->save();
+        return view('posts.show', ['post' => $post]);
     }
 
     /**

@@ -109,7 +109,7 @@ return [
     'preloader' => [
         'enabled' => true,
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+            'path' => 'http://127.0.0.1:8000/images/bg.png',
             'alt' => 'AdminLTE Preloader Image',
             'effect' => 'animation__shake',
             'width' => 60,
@@ -153,7 +153,7 @@ return [
     'layout_fixed_sidebar' => null,
     'layout_fixed_navbar' => null,
     'layout_fixed_footer' => null,
-    'layout_dark_mode' => null,
+    'layout_dark_mode' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -194,7 +194,7 @@ return [
     'classes_content' => '',
     'classes_sidebar' => 'sidebar-dark-primary elevation-4',
     'classes_sidebar_nav' => '',
-    'classes_topnav' => 'navbar-white navbar-light',
+    'classes_topnav' => 'navbar-dark navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
     'classes_topnav_container' => 'container',
 
@@ -293,18 +293,34 @@ return [
         // Navbar items:
         [
             'type'         => 'navbar-search',
-            'text'         => 'search',
+            'text'         => 'Buscar',
             'topnav_right' => true,
         ],
         [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
         ],
+        [
+            'type'         => 'navbar-notification',
+            'id'           => 'my-notification',      // An ID attribute (required).
+            'icon'         => 'fas fa-bell',          // A font awesome icon (required).
+            'icon_color'   => 'light',                // The initial icon color (optional).
+            'label'        => null,                      // The initial label for the badge (optional).
+            'label_color'  => 'danger',               // The initial badge color (optional).
+            'url'          => 'notifications/show',   // The url to access all notifications/elements (required).
+            'topnav_right' => true,                   // Or "topnav => true" to place on the left (required).
+            'dropdown_mode'   => true,                // Enables the dropdown mode (optional).
+            'dropdown_flabel' => 'Ver todas',         // The label for the dropdown footer link (optional).
+            'update_cfg'   => [
+                'url' => 'notifications/get',         // The url to periodically fetch new data (optional).
+                'period' => 30,                       // The update period for get new data (in seconds, optional).
+            ],
+        ],
 
         // Sidebar items:
         [
             'type' => 'sidebar-menu-search',
-            'text' => 'search',
+            'text' => 'Buscar',
         ],
         [
             'text' => 'blog',
@@ -312,10 +328,49 @@ return [
             'can'  => 'manage-blog',
         ],
         [
-            'text'        => 'pages',
-            'url'         => 'admin/pages',
+            'text'        => 'Posts',
+            'url'         => 'admin/posts',
             'icon'        => 'far fa-fw fa-file',
-            'label'       => 4,
+            'label'       => null,
+            'label_color' => 'success',
+            'submenu'       => [
+                [
+                    'text'      => 'Crear post',
+                    'url'       => 'posts/create',
+                ],
+                [
+                    'text'      => 'Mis posts',
+                    'url'       => 'posts/misposts',
+                ],                [
+                    'text'      => 'Mis borradores',
+                    'url'       => 'posts/misborradores',
+                ],
+                [
+                'text'      => 'Posts activos',
+                'url'       => 'admin/posts-activos',
+                ],
+                [
+                    'text'      => 'Borradores',
+                    'url'       => 'admin/posts-borradores',
+                ],
+                [
+                    'text'      => 'Categorías',
+                    'url'       => 'admin/categories',
+                ],
+                ],
+        ],
+        [
+            'text'        => 'Usuarios',
+            'url'         => 'admin/users',
+            'icon'        => 'far fa-fw fa-user',
+            'label'       => null,
+            'label_color' => 'success',
+        ],
+        [
+            'text'        => 'Suscripciones',
+            'url'         => 'admin/subscriptions',
+            'icon'        => 'far fa-fw fa-newspaper',
+            'label'       => null,
             'label_color' => 'success',
         ],
         ['header' => 'account_settings'],
@@ -329,61 +384,8 @@ return [
             'url'  => 'admin/settings',
             'icon' => 'fas fa-fw fa-lock',
         ],
-        [
-            'text'    => 'multilevel',
-            'icon'    => 'fas fa-fw fa-share',
-            'submenu' => [
-                [
-                    'text' => 'level_one',
-                    'url'  => '#',
-                ],
-                [
-                    'text'    => 'level_one',
-                    'url'     => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url'  => '#',
-                        ],
-                        [
-                            'text'    => 'level_two',
-                            'url'     => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'text' => 'level_one',
-                    'url'  => '#',
-                ],
-            ],
         ],
-        ['header' => 'labels'],
-        [
-            'text'       => 'important',
-            'icon_color' => 'red',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'warning',
-            'icon_color' => 'yellow',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'information',
-            'icon_color' => 'cyan',
-            'url'        => '#',
-        ],
-    ],
+
 
     /*
     |--------------------------------------------------------------------------

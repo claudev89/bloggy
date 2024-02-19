@@ -11,18 +11,23 @@ class Comentario extends Model
 
     protected $guarded = [];
 
-    public function User()
+    public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'autor');
     }
 
     public function likes()
     {
-        return $this->morphMany(Like::class, 'likeabke');
+        return $this->morphMany(Like::class, 'likeable');
     }
 
     public function post()
     {
         return $this->belongsTo(Post::class);
+    }
+
+    public function respuesta()
+    {
+        return $this->hasMany(Comentario::class, 'respuestaA');
     }
 }
