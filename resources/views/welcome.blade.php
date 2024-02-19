@@ -9,6 +9,7 @@
     @endif
     @php($posts = \App\Models\Post::where('borrador', 0)->orderBy('created_at', 'desc')->paginate(15))
     @foreach($posts as $post)
+        @php($fechaPost = \Carbon\Carbon::parse($post->created_at))
         <div class="card mb-2 mt-2">
             <div class="row g-0">
                 <div class="col-md-4">
@@ -20,7 +21,11 @@
                                 class="card-title">{{ $post->titulo }}</h4></a>
                         <small
                             class="d-inline-flex mb-2 px-2 py-1 fw-semibold text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-2">
-                            {{ date('d/m/Y', strtotime($post->created_at)) }}
+                            @if ($fechaPost->year === now()->year)
+                                {{ $fechaPost->isoFormat('D MMM') }}
+                            @else
+                                {{ $fechaPost->isoFormat('D MMM YYY') }}
+                            @endif
                         </small>
                         <text class="text-body-secondary">Posteado por
                             @if($post->user)

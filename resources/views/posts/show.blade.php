@@ -81,16 +81,14 @@
                                                 <div class="flex-grow-1 flex-shrink-1">
                                                     <div>
                                                         <div class="d-flex justify-content-between align-items-center">
-                                                            <p class="mb-1">
+                                                            <p class="mb-1 flex-fill">
                                                                 {{ $author_name }}<span class="small text-secondary d-block d-md-inline"> - <a href="#" style="text-decoration: none; color: inherit" data-mdb-tooltip-init title="{{ $fechaComentario->isoFormat('LLLL') }}">{{ $fechaComentario->diffForHumans() }}</a></span>
                                                             </p>
                                                             <div>
                                                                 <a href="#!" style="text-decoration: none; color: inherit"><i class="bi bi-reply me-1"></i><span class="small d-block d-md-inline d-none">Responder</span></a>
-                                                                @if($comentario->likes->count() >0)
-                                                                    <i class="bi bi-heart ms-2" style="font-style: normal"> {{ $comentario->likes->count() }} </i>
-                                                                @else
-                                                                    <i class="bi bi-heart ms-2"><br></i>
-                                                                @endif
+                                                            </div>
+                                                            <div class="ms-2">
+                                                                <livewire:LikeButton :likeable="$comentario" />
                                                             </div>
                                                         </div>
                                                         <p class="small mb-0">
@@ -132,11 +130,7 @@
                                                                             <p class="mb-1">
                                                                                 {{ $author_name }}<span class="small text-secondary d-block d-md-inline"> - <a href="#" style="text-decoration: none; color: inherit" data-mdb-tooltip-init title="{{ $fechaRespuesta->isoFormat('LLLL') }}">{{ $fechaRespuesta->diffForHumans() }}</a></span>
                                                                             </p>
-                                                                            @if($respuesta->likes->count() > 0)
-                                                                                <i class="bi bi-heart" style="font-style: normal"> {{ $respuesta->likes->count() }}</i>
-                                                                            @else
-                                                                                <i class="bi bi-heart" style="font-style: normal"></i>
-                                                                            @endif
+                                                                            <livewire:LikeButton :likeable="$comentario" />
                                                                         </div>
                                                                         <p class="small mb-0">
                                                                             {{ $respuesta->cuerpo }}
