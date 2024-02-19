@@ -2,47 +2,43 @@
 
 namespace App\Livewire;
 
+use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
 use App\Models\Like;
 
 class LikeButton extends Component
 {
+    public $likeable;
     public $likeableType;
-    public $likeableId;
+    public $liked = false;
     public $likeCount;
 
-    public function mount($likeableType, $likeableId)
+    public function mount($likeable)
     {
-        $this->likeableType = $likeableType;
-        $this->likeableId = $likeableId;
-        $this->likeCount = Like::where('likeable_type', $this->likeableType)
-            ->where('likeable_id', $this->likeableId)
-            ->count();
+        $this->likeable = $likeable;
+        $this->likeableType = $likeable->getMorphClass();
+        $this->checkIfLiked();
     }
 
-    public function toggleLike()
+    public function like()
     {
-        $user_id = auth()->id();
-
-        $like = Like::where('user_id', $user_id)
-        ->where('likeable_type', $this->likeableType)
-        ->where('likeable_id', $this->likeableId)
-        ->first();
-
-        if($like) {
-            $like->delete();
-            $this->likeCount--;
+        if ($this->liked) {
+            $this->likeable->likes()->where('user_id', auth()->id())->delete();
+            $this->liked = false;
         } else {
-            Like::create([
-                'user_id' => $user_id,
-                'likeable_type' => $this->likeableType,
-                'likeable_id' => $this->likeableId
-            ]);
-            $this->likeCount++;
+            $this->likeable->likes()->create(['user_id' => auth()->id()]);
+            $this->liked = true;
         }
     }
+
+    protected function checkIfLiked()
+    {
+        $this->liked = $this->likeable->likes()->where('user_id', auth()->id())->exists();
+    }
+
     public function render()
     {
+        $this->likeCount = $this->likeable->likes()->count();
         return view('livewire.like-button');
     }
 }

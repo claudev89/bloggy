@@ -2,10 +2,11 @@
 
 @section('content')
 
+
     <h2 class="text-uppercase">{{ $post->titulo }}</h2>
 
-    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
-        <ol class="breadcrumb">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">Inicio</a></li>
             @if( $post->categories->first()->parentCategory )
                 <li class="breadcrumb-item">
@@ -28,8 +29,7 @@
         <div class="col-10">
             <div class="row justify-content-end">
                 <div class="col-1 align-content-center">
-                    <i class="bi bi-heart"></i><br>
-                    {{ $post->likes->count() }}
+                    <livewire:LikeButton :likeable="$post" />
                 </div>
                 <div class="col-1 align-content-center">
                     <i class="bi bi-chat-square"></i> <br>
@@ -62,6 +62,7 @@
                                 <!-- Comentarios -->
                                 @if($post->comentarios->isNotEmpty())
                                     @foreach($post->comentarios->sortByDesc('created_at') as $comentario)
+                                        @php($fechaComentario = \Carbon\Carbon::parse($comentario->created_at))
                                         @if(is_null($comentario->respuestaA))
                                             @if($comentario->user->profile_photo_path)
                                                 @php($profile_photo_url = $comentario->user->profile_photo_path)
@@ -81,7 +82,7 @@
                                                     <div>
                                                         <div class="d-flex justify-content-between align-items-center">
                                                             <p class="mb-1">
-                                                                {{ $author_name }}<span class="small text-secondary d-block d-md-inline"> - 2 hours ago</span>
+                                                                {{ $author_name }}<span class="small text-secondary d-block d-md-inline"> - <a href="#" style="text-decoration: none; color: inherit" data-mdb-tooltip-init title="{{ $fechaComentario->isoFormat('LLLL') }}">{{ $fechaComentario->diffForHumans() }}</a></span>
                                                             </p>
                                                             <div>
                                                                 <a href="#!" style="text-decoration: none; color: inherit"><i class="bi bi-reply me-1"></i><span class="small d-block d-md-inline d-none">Responder</span></a>
@@ -100,6 +101,7 @@
 
                                                     <!-- Inicio respuestas -->
                                                     @foreach($comentario->respuesta as $respuesta)
+                                                        @php($fechaRespuesta = \Carbon\Carbon::parse($respuesta->created_at))
                                                         @if($comentario->id == $respuesta->respuestaA)
                                                             @if(($respuesta->user->profile_photo_path))
                                                                 @php($profile_photo_url = $respuesta->user->profile_photo_path)
@@ -128,7 +130,7 @@
                                                                     <div>
                                                                         <div class="d-flex justify-content-between align-items-center">
                                                                             <p class="mb-1">
-                                                                                {{ $author_name }}<span class="small text-secondary d-block d-md-inline"> - 2 hours ago</span>
+                                                                                {{ $author_name }}<span class="small text-secondary d-block d-md-inline"> - <a href="#" style="text-decoration: none; color: inherit" data-mdb-tooltip-init title="{{ $fechaRespuesta->isoFormat('LLLL') }}">{{ $fechaRespuesta->diffForHumans() }}</a></span>
                                                                             </p>
                                                                             @if($respuesta->likes->count() > 0)
                                                                                 <i class="bi bi-heart" style="font-style: normal"> {{ $respuesta->likes->count() }}</i>
@@ -191,6 +193,13 @@
         </div>
     @endauth
 
+    <script>
+        // Initialization for ES Users
+        import { Tooltip, initMDB } from "mdb-ui-kit";
+
+        initMDB({ Tooltip });
+    </script>
+
 @endsection
 
 <style>
@@ -208,4 +217,7 @@
             height: 20px;
         }
     }
+
+
+
 </style>
