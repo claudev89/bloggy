@@ -2,8 +2,7 @@
 
 @section('content')
 
-
-    <h2 class="text-uppercase">{{ $post->titulo }}</h2>
+    <h2 class="text-uppercase" xmlns="http://www.w3.org/1999/html">{{ $post->titulo }}</h2>
 
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -33,7 +32,7 @@
                 </div>
                 <div class="col-1 align-content-center">
                     <i class="bi bi-chat-square"></i> <br>
-                    {{ $post->comentarios->count() }}
+                    <span class="small"> {{ $post->comentarios->count() }}</span>
                 </div>
             </div>
         </div>
@@ -75,9 +74,17 @@
                                                 @php($author_name = "<i>Cuenta Eliminada</i>")
                                             @endif
                                             <div class="d-flex flex-start mt-4">
-                                                <img class="rounded-circle shadow-1-strong me-1 me-md-3 profile_pct"
-                                                     src="{{ $profile_photo_url }}" alt="{{ $author_name }}" width="65"
-                                                     height="65" />
+                                                @if($comentario->user)
+                                                    <a href="{{ route('users.show', $comentario->user) }}">
+                                                    <img class="rounded-circle shadow-1-strong me-1 me-md-3 profile_pct"
+                                                         src="{{ $profile_photo_url }}" alt="{{ $author_name }}" width="65"
+                                                         height="65" />
+                                                    </a>
+                                                @else
+                                                    <img class="rounded-circle shadow-1-strong me-1 me-md-3 profile_pct"
+                                                         src="{{ $profile_photo_url }}" alt="{{ $author_name }}" width="65"
+                                                         height="65" />
+                                                @endif
                                                 <div class="flex-grow-1 flex-shrink-1">
                                                     <div>
                                                         <div class="d-flex justify-content-between align-items-center">
@@ -130,7 +137,7 @@
                                                                             <p class="mb-1">
                                                                                 {{ $author_name }}<span class="small text-secondary d-block d-md-inline"> - <a href="#" style="text-decoration: none; color: inherit" data-mdb-tooltip-init title="{{ $fechaRespuesta->isoFormat('LLLL') }}">{{ $fechaRespuesta->diffForHumans() }}</a></span>
                                                                             </p>
-                                                                            <livewire:LikeButton :likeable="$comentario" />
+                                                                            <livewire:LikeButton :likeable="$respuesta" />
                                                                         </div>
                                                                         <p class="small mb-0">
                                                                             {{ $respuesta->cuerpo }}
@@ -146,7 +153,9 @@
                                     @endforeach
                                 @else
                                     <div class="alert alert-dark">
-                                        Todavía no hay comentarios. @auth Sé el primero en dejar uno. @endauth
+                                        Todavía no hay comentarios.
+                                        @auth Sé el primero en dejar uno. @endauth
+                                        @guest <a href="/login">Inicia sesión</a> para dejar el primero. @endguest
                                     </div>
                                 @endif
                             </div>
@@ -156,6 +165,15 @@
             </div>
         </div>
     </div>
+    @guest
+        @if($post->comentarios->isNotEmpty())
+            <div class="row justify-content-center">
+                <div class="alert alert-dark col-12 col-md-5" style="text-align: center">
+                    <a href="/login">Inicia sesión</a> para poder comentar.
+                </div>
+            </div>
+        @endif
+    @endguest
 
     @auth()
         <div class="container text-dark">
