@@ -75,9 +75,17 @@
                                                 @php($author_name = "<i>Cuenta Eliminada</i>")
                                             @endif
                                             <div class="d-flex flex-start mt-4">
-                                                <img class="rounded-circle shadow-1-strong me-1 me-md-3 profile_pct"
-                                                     src="{{ $profile_photo_url }}" alt="{{ $author_name }}" width="65"
-                                                     height="65" />
+                                                @if($comentario->user)
+                                                    <a href="{{ route('users.show', $comentario->user) }}">
+                                                    <img class="rounded-circle shadow-1-strong me-1 me-md-3 profile_pct"
+                                                         src="{{ $profile_photo_url }}" alt="{{ $author_name }}" width="65"
+                                                         height="65" />
+                                                    </a>
+                                                @else
+                                                    <img class="rounded-circle shadow-1-strong me-1 me-md-3 profile_pct"
+                                                         src="{{ $profile_photo_url }}" alt="{{ $author_name }}" width="65"
+                                                         height="65" />
+                                                @endif
                                                 <div class="flex-grow-1 flex-shrink-1">
                                                     <div>
                                                         <div class="d-flex justify-content-between align-items-center">
@@ -130,7 +138,7 @@
                                                                             <p class="mb-1">
                                                                                 {{ $author_name }}<span class="small text-secondary d-block d-md-inline"> - <a href="#" style="text-decoration: none; color: inherit" data-mdb-tooltip-init title="{{ $fechaRespuesta->isoFormat('LLLL') }}">{{ $fechaRespuesta->diffForHumans() }}</a></span>
                                                                             </p>
-                                                                            <livewire:LikeButton :likeable="$comentario" />
+                                                                            <livewire:LikeButton :likeable="$respuesta" />
                                                                         </div>
                                                                         <p class="small mb-0">
                                                                             {{ $respuesta->cuerpo }}

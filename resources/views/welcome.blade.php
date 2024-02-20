@@ -20,7 +20,7 @@
                         <a style="text-decoration: none; color: inherit" href="{{ route('posts.show', $post )}}"><h4
                                 class="card-title">{{ $post->titulo }}</h4></a>
                         <small
-                            class="d-inline-flex mb-2 px-2 py-1 fw-semibold text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-2">
+                            class="d-inline-flex mb-2 px-2 py-1 fw-semibold text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-2 text-uppercase">
                             @if ($fechaPost->year === now()->year)
                                 {{ $fechaPost->isoFormat('D MMM') }}
                             @else
