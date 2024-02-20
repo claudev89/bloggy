@@ -2,8 +2,7 @@
 
 @section('content')
 
-
-    <h2 class="text-uppercase">{{ $post->titulo }}</h2>
+    <h2 class="text-uppercase" xmlns="http://www.w3.org/1999/html">{{ $post->titulo }}</h2>
 
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -33,7 +32,7 @@
                 </div>
                 <div class="col-1 align-content-center">
                     <i class="bi bi-chat-square"></i> <br>
-                    {{ $post->comentarios->count() }}
+                    <span class="small"> {{ $post->comentarios->count() }}</span>
                 </div>
             </div>
         </div>
@@ -154,7 +153,9 @@
                                     @endforeach
                                 @else
                                     <div class="alert alert-dark">
-                                        Todavía no hay comentarios. @auth Sé el primero en dejar uno. @endauth
+                                        Todavía no hay comentarios.
+                                        @auth Sé el primero en dejar uno. @endauth
+                                        @guest <a href="/login">Inicia sesión</a> para dejar el primero. @endguest
                                     </div>
                                 @endif
                             </div>
@@ -164,6 +165,15 @@
             </div>
         </div>
     </div>
+    @guest
+        @if($post->comentarios->isNotEmpty())
+            <div class="row justify-content-center">
+                <div class="alert alert-dark col-12 col-md-5" style="text-align: center">
+                    <a href="/login">Inicia sesión</a> para poder comentar.
+                </div>
+            </div>
+        @endif
+    @endguest
 
     @auth()
         <div class="container text-dark">
