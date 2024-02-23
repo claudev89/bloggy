@@ -13,6 +13,7 @@ class LikeButton extends Component
     public $liked = false;
     public $likeCount;
 
+
     public function mount($likeable)
     {
         $this->likeable = $likeable;
@@ -41,4 +42,5 @@ class LikeButton extends Component
         $this->likeCount = $this->likeable->likes()->count();
         return view('livewire.like-button');
     }
+
 }
