@@ -6,7 +6,8 @@
                     <livewire:LikeButton :likeable="$post" :key="'like-post-'.$post->id"/>
                 </div>
                 <div class="col-1 align-content-center">
-                    <i class="bi bi-chat-square"></i> <br>
+                    <a href="{{ auth()->check() ? '#comment' : route('login') }}" style="color: inherit"><i
+                            class="bi bi-chat-square"></i></a><br>
                     <span class="small"> {{ $post->comentarios->count() }} </span>
                 </div>
             </div>
@@ -79,11 +80,10 @@
                                                                         data-mdb-tooltip-init
                                                                         title="{{ $fechaComentario->isoFormat('LLLL') }}">{{ $fechaComentario->diffForHumans() }}</a></span>
                                                             </p>
-                                                            <div>
-                                                                <a href="#!"
-                                                                   style="text-decoration: none; color: inherit"><i
-                                                                        class="bi bi-reply me-1"></i><span
-                                                                        class="small d-block d-md-inline d-none">Responder</span></a>
+                                                            <div @auth() wire:click="displayReplyForm({{ $comentario->id }})"
+                                                                 style="cursor: pointer" @endauth>
+                                                                <i class="bi bi-reply me-1"></i><span
+                                                                    class="small d-block d-md-inline d-none">Responder</span>
                                                             </div>
                                                             <div class="ms-2">
                                                                 <livewire:LikeButton :likeable="$comentario"
@@ -94,6 +94,42 @@
                                                             {{ $comentario->cuerpo }}
                                                         </p>
                                                     </div>
+
+                                                    @if($showReplyForm === $comentario->id)
+                                                        <div class="container text-dark">
+                                                            <div class="row d-flex justify-content-center">
+                                                                <div class="col-12">
+                                                                    <div class="d-flex flex-start w-100 mt-3">
+                                                                        <img
+                                                                            class="rounded-circle shadow-1-strong me-3 profile_pct"
+                                                                            src="@if(is_null(auth()->user()->profile_photo_path)) /images/pp.webp @else(auth()->user()->profile_photo_path) @endif"
+                                                                            alt="{{auth()->user()->name}}"
+                                                                            width="35"
+                                                                            height="35"/>
+                                                                        <div class="w-100">
+                                                                            <div class="form-outline mb-2">
+                                                                            <textarea class="form-control" id="replyBody"
+                                                                                      rows="4"
+                                                                                      wire:model="replyBody"></textarea>
+                                                                            </div>
+                                                                            @error('replyBody')
+                                                                                <span class="alert alert-danger">{{ $message }}</span>
+                                                                            @enderror
+                                                                            <div
+                                                                                class="d-flex justify-content-end mt-3">
+                                                                                <button wire:click="replyToComment"
+                                                                                        class="btn btn-outline-light">
+                                                                                    Responder <i
+                                                                                        class="fas fa-long-arrow-alt-right ms-1"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+
                                                     <!-- Fin comentario -->
 
                                                     <!-- Inicio respuestas -->
