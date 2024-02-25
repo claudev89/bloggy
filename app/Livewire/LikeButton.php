@@ -3,11 +3,13 @@
 namespace App\Livewire;
 
 use Illuminate\Database\Eloquent\Model;
+use Livewire\Attributes\Reactive;
 use Livewire\Component;
 use App\Models\Like;
 
 class LikeButton extends Component
 {
+    #[Reactive]
     public $likeable;
     public $likeableType;
     public $liked = false;
