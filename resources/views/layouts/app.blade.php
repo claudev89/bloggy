@@ -38,7 +38,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
 
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="autoXpand">
                     @php($categories = \App\Models\Category::whereNull('parentCategory')->get())
                     @foreach($categories as $category)
                         @if($category->subcategory->isNotEmpty())
@@ -87,6 +87,88 @@
                             </li>
                         @endif
                     @else
+                                <li class="nav-item dropdown mt-1" id="notificaciones">
+                                    <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-bell-fill"></i>
+                                        <span class="position-absolute top-0 start-90 translate-middle badge rounded-pill bg-danger">
+                                            4
+                                        </span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-dark" style="width: 22rem;">
+                                        <li><a class="dropdown-item p-0" href="#">
+                                                <div class="card p-0">
+                                                        <div class="card-body p-1">
+                                                            <a href="#">
+                                                                <div class="row" onclick="window.location.href = '#';" style="cursor: pointer;">
+                                                                    <div class="col-3 pe-0"><a href="#sss"><img class="w-100 h-100" src="https://scontent.fcjc1-1.fna.fbcdn.net/v/t39.30808-6/275576245_368936285098451_4743975802562067660_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=dd5e9f&_nc_eui2=AeE3DTpW6xlaZJ1Ydk6iCcx-1GJ_V4rKzlPUYn9XisrOUwLGG16lOHMTo_5Ompd00fh7KE5AAdwSPCBD0Sl_CUq2&_nc_ohc=a2JsSg9UrykAX-6FkW4&_nc_ht=scontent.fcjc1-1.fna&oh=00_AfDuSCCgfruD_OfR3jAslFEt1zAQ2mV0urePEw7Y5-swrg&oe=65E0ADC4"></a></div>
+                                                                    <div class="col text-reset ps-2">
+                                                                        <strong><a href="#" class="text-reset" style="text-decoration: none">Perro Conchesumare </a></strong><br>
+                                                                        <i class="bi bi-chat-square"></i> ha comentado tu <a href="#" class="text-reset" style="text-decoration: none"><strong>publicación</strong></a>.
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                    </div>
+                                                </div>
+                                            </a></li>
+                                        <li><a class="dropdown-item p-0" href="#">
+                                                <div class="card p-0">
+                                                    <div class="card-body p-1">
+                                                        <a href="#">
+                                                            <div class="row" onclick="window.location.href = '#';" style="cursor: pointer;">
+                                                                <div class="col-3 pe-0"><a href="#sss"><img class="w-100 h-100" src="https://i.pinimg.com/550x/09/90/fe/0990fe16f61df266c4fc0923bff98c3b.jpg"></a></div>
+                                                                <div class="col text-reset ps-2">
+                                                                    <strong><a href="#" class="text-reset" style="text-decoration: none">Bob Esponja</a></strong><br>
+                                                                    <i class="bi bi-chat-square-heart"></i> le da dado like a tu <a href="#" class="text-reset" style="text-decoration: none"> <strong>comentario</strong></a>
+                                                                    en la <a href="pub" class="text-reset" style="text-decoration: none"><strong>publicación</strong></a> de <a href="usu" class="text-reset" style="text-decoration: none"><strong>Perro Conchesumare</strong></a>.
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </a></li>
+
+                                        <li><a class="dropdown-item p-0" href="#">
+                                                <div class="card p-0">
+                                                    <div class="card-body p-1">
+                                                        <a href="#">
+                                                            <div class="row" onclick="window.location.href = '#';" style="cursor: pointer;">
+                                                                <div class="col-3 pe-0"><a href="#sss"><img class="w-100 h-100" src="https://i.pinimg.com/originals/79/4f/c2/794fc2b1eecc34caaf3fa7f92de6c1b9.jpg"></a></div>
+                                                                <div class="col text-reset ps-2">
+                                                                    <strong><a href="#" class="text-reset" style="text-decoration: none">Un Pajarito</a></strong><br>
+                                                                    <i class="bi bi-reply"></i> ha respondido tu <a href="#" class="text-reset" style="text-decoration: none"><strong>comentario</strong></a>
+                                                                     en la <a href="#" class="text-reset" style="text-decoration: none"><strong>publicación</strong></a> de <a href="#" class="text-reset" style="text-decoration: none"><strong>Un Gato</strong></a>.
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </a></li>
+
+                                        <li><a class="dropdown-item p-0" href="#">
+                                                <div class="card p-0">
+                                                    <div class="card-body p-1">
+                                                        <a href="#">
+                                                            <div class="row" onclick="window.location.href = '#';" style="cursor: pointer;">
+                                                                <div class="col-3 pe-0"><a href="#sss"><img class="w-100 h-100" src="https://scontent.fcjc1-1.fna.fbcdn.net/v/t39.30808-1/255068823_273708308099261_9158662997824923348_n.jpg?stp=dst-jpg_p200x200&_nc_cat=111&ccb=1-7&_nc_sid=596444&_nc_eui2=AeFi4wIbDQrSzDiQV4p4xnWMX8Lrztk6ASVfwuvO2ToBJfyCeDLxiZ049Srwu0B2XXyRXULhCOdzpEXihK_sPPpK&_nc_ohc=dc7RyAGJR4EAX_NCie-&_nc_ht=scontent.fcjc1-1.fna&oh=00_AfB3LqI82MQPjfcCZOMxVecqs9Y6vHkuu6iOlaK4B_pj3w&oe=65E1991C"></a></div>
+                                                                <div class="col text-reset ps-2">
+                                                                    <strong><a href="#" class="text-reset" style="text-decoration: none">Un Gato</a></strong><br>
+                                                                    <i class="bi bi-chat-square-heart"></i>  le ha dado like a tu <a href="#" class="text-reset" style="text-decoration: none"><strong>publicación</strong></a>.
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </a></li>
+                                            <div class="mt-2 d-flex justify-content-center align-items-center">
+                                                <button class="btn btn-outline-light btn-sm">
+                                                    Ver todas las notificaciones
+                                                </button>
+                                            </div>
+                                    </ul>
+                                </li>
+
+
+
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -237,11 +319,11 @@
 </script>
 
 <style>
-    .dropdown:hover > .dropdown-menu {
+    #autoXpand .dropdown:hover > .dropdown-menu {
         display: block;
     }
 
-    .dropdown > .dropdown-toggle:active {
+    #autoXpand .dropdown > .dropdown-toggle:active {
         /*Without this, clicking will make it sticky*/
         pointer-events: none;
     }
@@ -251,7 +333,9 @@
             display: inline-grid;}
         }
 
-
+    #notificaciones .dropdown-toggle::after {
+        display: none; /* Oculta la flecha del dropdown */
+    }
 
 </style>
 </html>
