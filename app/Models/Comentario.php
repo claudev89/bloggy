@@ -30,4 +30,9 @@ class Comentario extends Model
     {
         return $this->hasMany(Comentario::class, 'respuestaA');
     }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
 }

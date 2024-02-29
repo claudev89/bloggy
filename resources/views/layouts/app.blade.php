@@ -88,7 +88,7 @@
                         @endif
                     @else
                                 <li class="nav-item dropdown mt-1" id="notificaciones">
-                                    <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn btn-dark- dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="bi bi-bell-fill"></i>
                                         <span class="position-absolute top-0 start-90 translate-middle badge rounded-pill bg-danger">
                                             4
@@ -96,7 +96,7 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-dark" style="width: 22rem;">
                                         <li><a class="dropdown-item p-0" href="#">
-                                                <div class="card p-0">
+                                                <div class="card p-0 bg-secondary">
                                                         <div class="card-body p-1">
                                                             <a href="#">
                                                                 <div class="row" onclick="window.location.href = '#';" style="cursor: pointer;">

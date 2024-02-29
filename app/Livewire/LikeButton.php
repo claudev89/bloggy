@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Notification;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
@@ -26,7 +27,7 @@ class LikeButton extends Component
     public function like()
     {
         if ($this->liked) {
-            $this->likeable->likes()->where('user_id', auth()->id())->delete();
+            $this->likeable->likes()->where('user_id', auth()->id())->firstOrFail()->delete();
             $this->liked = false;
         } else {
             $this->likeable->likes()->create(['user_id' => auth()->id()]);

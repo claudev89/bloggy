@@ -34,4 +34,9 @@ class Post extends Model
     {
         return $this->hasMany(Comentario::class);
     }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
 }
