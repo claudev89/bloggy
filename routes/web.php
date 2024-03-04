@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SuscripcionController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,7 @@ Route::resource('categories', CategoryController::class);
 Route::resource('contacto', ContactoController::class)->only(['index', 'store', 'enviar-formulario']);
 Route::resource('users', UserController::class);
 Route::get('/confirmar-suscripcion/{token}', [SuscripcionController::class, 'confirmSuscription']);
+Route::get('notification/{notification}/{postId}', [NotificationController::class, 'show'])->name('notifications.show');
 
 Route::middleware([
     'auth:sanctum',

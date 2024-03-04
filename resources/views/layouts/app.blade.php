@@ -87,86 +87,77 @@
                             </li>
                         @endif
                     @else
-                                <li class="nav-item dropdown mt-1" id="notificaciones">
-                                    <button class="btn btn-dark- dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-bell-fill"></i>
-                                        <span class="position-absolute top-0 start-90 translate-middle badge rounded-pill bg-danger">
-                                            4
-                                        </span>
+
+                        @auth
+                            @php($user = \App\Models\User::find(auth()->id()))
+                            @php($notifications = $user->allNotifications()->get())
+
+
+                            <li class="nav-item dropdown mt-1" id="notificaciones">
+                                <button class="btn btn-dark- dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-bell-fill"></i>
+                                    @if($notifications->count()>0)
+                                        @if($notifications->where('read', 0)->count()>0)
+                                            <span class="position-absolute top-0 start-90 translate-middle badge rounded-pill bg-danger">
+                                                    {{ $notifications->where('read', 0)->count() }}
+                                                </span>
+                                        @endif
+                                    @endif
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-dark" style="width: 22rem;">
+
+                            @forelse($notifications as $notification)
+                                @php( $user = \App\Models\User::find($notification->user_id))
+                                @if( $notification->notifiable_type == 'c')
+                                    @php( $comment = \App\Models\Comentario::find($notification->notifiable_id))
+                                @endif
+
+                                @if( $notification->type == 'l')
+                                    @php( $action = "<i class='bi bi-chat-square-heart'></i>  le ha dado like a tu " )
+                                @elseif( $notification->type == 'c')
+                                    @php( $action = "<i class='bi bi-chat-square'></i> ha comentado tu " )
+                                @endif
+
+                                @if( $notification->notifiable_type == 'p')
+                                            @php( $postN = \App\Models\Post::find($notification->notifiable_id ))
+                                    @php( $element = "<a href='".route('posts.show', $postN)."' class='text-reset' style='text-decoration: none'>publicación </a>")
+                                @elseif( $notification->notifiable_type == 'c')
+                                    @php( $postN = \App\Models\Post::find(\App\Models\Comentario::find($notification->notifiable_id)->id))
+                                    @if(!is_null($comment->respuestaA))
+                                        @php( $autor = \App\Models\User::find(\App\Models\Comentario::find($notification->notifiable_id)->autor ))
+                                        @php( $element = "respuesta al comentario de <a href='".route('users.show', $autor)."' class='text-reset' style='text-decoration: none'>".$autor->name."</a> en la <a href='".route('posts.show', $postN)."' class='text-reset' style='text-decoration: none'>publicación </a> de <a href='".route('users.show', $comment->post->user)."' class='text-reset' style='text-decoration: none'>".$comment->post->user->name."</a>")
+                                            @else
+                                                @php( $element = "comentario en la <a href='".route('posts.show', $postN)."' class='text-reset' style='text-decoration: none'> publicación</a> de <a href='".route('users.show', \App\Models\User::find($postN->autor))."' class='text-reset' style='text-decoration: none'>".\App\Models\User::find($postN->autor)->name."</a>" )
+                                        @endif
+                                @endif
+                                        <li><a class="dropdown-item p-0" href="#">
+                                                <div class="card p-0 ist-group-item list-group-item-action {{ $notification->read === 0 ? 'bg-secondary border-dark' :''}}">
+                                                    <div class="card-body p-1">
+                                                        <a href="#">
+                                                            <div class="row" onclick="window.location.href = '{{ route('notifications.show', ['notification' => $notification->id, 'postId' => $postN->id]) }}';" style="cursor: pointer;">
+                                                            <div class="col-3 pe-0"><a href="{{ route('users.show', $user) }}"><img class="w-100 rounded-circle" src="{{ $user->profile_photo_url }}"></a></div>
+                                                                <div class="col text-reset ps-2">
+                                                                    <strong><a href="{{ route('users.show', $user) }}" class="text-reset" style="text-decoration: none">{{ $user->name }} </a></strong><br>
+                                                                    {!! $action !!} {!! $element !!}
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </a></li>
+                            @empty
+                                <p class="alert alert-dark">No tienes notificaciones.<p/>
+                            @endforelse
+
+                                <div class="mt-2 d-flex justify-content-center align-items-center">
+                                    <button class="btn btn-outline-light btn-sm">
+                                        Ver todas las notificaciones
                                     </button>
-                                    <ul class="dropdown-menu dropdown-menu-dark" style="width: 22rem;">
-                                        <li><a class="dropdown-item p-0" href="#">
-                                                <div class="card p-0 bg-secondary">
-                                                        <div class="card-body p-1">
-                                                            <a href="#">
-                                                                <div class="row" onclick="window.location.href = '#';" style="cursor: pointer;">
-                                                                    <div class="col-3 pe-0"><a href="#sss"><img class="w-100 h-100" src="https://scontent.fcjc1-1.fna.fbcdn.net/v/t39.30808-6/275576245_368936285098451_4743975802562067660_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=dd5e9f&_nc_eui2=AeE3DTpW6xlaZJ1Ydk6iCcx-1GJ_V4rKzlPUYn9XisrOUwLGG16lOHMTo_5Ompd00fh7KE5AAdwSPCBD0Sl_CUq2&_nc_ohc=a2JsSg9UrykAX-6FkW4&_nc_ht=scontent.fcjc1-1.fna&oh=00_AfDuSCCgfruD_OfR3jAslFEt1zAQ2mV0urePEw7Y5-swrg&oe=65E0ADC4"></a></div>
-                                                                    <div class="col text-reset ps-2">
-                                                                        <strong><a href="#" class="text-reset" style="text-decoration: none">Perro Conchesumare </a></strong><br>
-                                                                        <i class="bi bi-chat-square"></i> ha comentado tu <a href="#" class="text-reset" style="text-decoration: none"><strong>publicación</strong></a>.
-                                                                    </div>
-                                                                </div>
-                                                            </a>
-                                                    </div>
-                                                </div>
-                                            </a></li>
-                                        <li><a class="dropdown-item p-0" href="#">
-                                                <div class="card p-0">
-                                                    <div class="card-body p-1">
-                                                        <a href="#">
-                                                            <div class="row" onclick="window.location.href = '#';" style="cursor: pointer;">
-                                                                <div class="col-3 pe-0"><a href="#sss"><img class="w-100 h-100" src="https://i.pinimg.com/550x/09/90/fe/0990fe16f61df266c4fc0923bff98c3b.jpg"></a></div>
-                                                                <div class="col text-reset ps-2">
-                                                                    <strong><a href="#" class="text-reset" style="text-decoration: none">Bob Esponja</a></strong><br>
-                                                                    <i class="bi bi-chat-square-heart"></i> le da dado like a tu <a href="#" class="text-reset" style="text-decoration: none"> <strong>comentario</strong></a>
-                                                                    en la <a href="pub" class="text-reset" style="text-decoration: none"><strong>publicación</strong></a> de <a href="usu" class="text-reset" style="text-decoration: none"><strong>Perro Conchesumare</strong></a>.
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </a></li>
+                                </div>
+                                </ul>
+                            </li>
 
-                                        <li><a class="dropdown-item p-0" href="#">
-                                                <div class="card p-0">
-                                                    <div class="card-body p-1">
-                                                        <a href="#">
-                                                            <div class="row" onclick="window.location.href = '#';" style="cursor: pointer;">
-                                                                <div class="col-3 pe-0"><a href="#sss"><img class="w-100 h-100" src="https://i.pinimg.com/originals/79/4f/c2/794fc2b1eecc34caaf3fa7f92de6c1b9.jpg"></a></div>
-                                                                <div class="col text-reset ps-2">
-                                                                    <strong><a href="#" class="text-reset" style="text-decoration: none">Un Pajarito</a></strong><br>
-                                                                    <i class="bi bi-reply"></i> ha respondido tu <a href="#" class="text-reset" style="text-decoration: none"><strong>comentario</strong></a>
-                                                                     en la <a href="#" class="text-reset" style="text-decoration: none"><strong>publicación</strong></a> de <a href="#" class="text-reset" style="text-decoration: none"><strong>Un Gato</strong></a>.
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </a></li>
-
-                                        <li><a class="dropdown-item p-0" href="#">
-                                                <div class="card p-0">
-                                                    <div class="card-body p-1">
-                                                        <a href="#">
-                                                            <div class="row" onclick="window.location.href = '#';" style="cursor: pointer;">
-                                                                <div class="col-3 pe-0"><a href="#sss"><img class="w-100 h-100" src="https://scontent.fcjc1-1.fna.fbcdn.net/v/t39.30808-1/255068823_273708308099261_9158662997824923348_n.jpg?stp=dst-jpg_p200x200&_nc_cat=111&ccb=1-7&_nc_sid=596444&_nc_eui2=AeFi4wIbDQrSzDiQV4p4xnWMX8Lrztk6ASVfwuvO2ToBJfyCeDLxiZ049Srwu0B2XXyRXULhCOdzpEXihK_sPPpK&_nc_ohc=dc7RyAGJR4EAX_NCie-&_nc_ht=scontent.fcjc1-1.fna&oh=00_AfB3LqI82MQPjfcCZOMxVecqs9Y6vHkuu6iOlaK4B_pj3w&oe=65E1991C"></a></div>
-                                                                <div class="col text-reset ps-2">
-                                                                    <strong><a href="#" class="text-reset" style="text-decoration: none">Un Gato</a></strong><br>
-                                                                    <i class="bi bi-chat-square-heart"></i>  le ha dado like a tu <a href="#" class="text-reset" style="text-decoration: none"><strong>publicación</strong></a>.
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </a></li>
-                                            <div class="mt-2 d-flex justify-content-center align-items-center">
-                                                <button class="btn btn-outline-light btn-sm">
-                                                    Ver todas las notificaciones
-                                                </button>
-                                            </div>
-                                    </ul>
-                                </li>
-
+                        @endauth
 
 
                         <li class="nav-item dropdown">

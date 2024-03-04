@@ -62,4 +62,16 @@ class UserController extends Controller
     {
         //
     }
+
+    public function getProfilePic()
+    {
+        if($this->profile_photo_url == null)
+        {
+            return "https://www.shutterstock.com/image-vector/blank-avatar-photo-place-holder-600nw-1095249842.jpg";
+        }
+        else
+        {
+            return $this->profile_photo_url;
+        }
+    }
 }

@@ -6,14 +6,14 @@
         @csrf
         <div class="mb-3">
             <label for="name" class="form-label">Nombre</label>
-            <input type="text" wire:model="name" class="form-control @error('name') is-invalid @enderror is-valid" {{ $errors->has('name') ? '' : 'is-valid' }} value="{{ old('name') }}" id="name" placeholder="Juan Prez" required>
+            <input type="text" wire:model.live.debounce.200ms="name" class="form-control @error('name') is-invalid @enderror is-valid" {{ $errors->has('name') ? '' : 'is-valid' }} value="{{ old('name') }}" id="name" placeholder="Juan Pérez" required>
             @error('name')
             <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
         <div class="mb-3">
             <label for="email" class="form-label">Correo electrónico</label>
-            <input type="email" wire:model="email" class="form-control @error('email') is-invalid @enderror is-valid" {{ $errors->has('email') ? '' : 'is-valid' }} value="{{ old('email') }}" id="name" placeholder="hola@example.com" required>
+            <input type="email" wire:model.live.debounce.200ms="email" class="form-control @error('email') is-invalid @enderror is-valid" {{ $errors->has('email') ? '' : 'is-valid' }} value="{{ old('email') }}" id="name" placeholder="hola@example.com" required>
             @error('email')
             <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -21,7 +21,7 @@
         </div>
         <div class="mb-3">
             <label for="messageContent" class="form-label">Mensaje</label>
-            <textarea wire:model="messageContent" class="form-control @error('messageContent') is-invalid @enderror is-valid" {{ $errors->has('messageContent') ? '' : 'is-valid' }} id="messageContent"  rows="8"></textarea>
+            <textarea wire:model.live.debounce.200ms="messageContent" class="form-control @error('messageContent') is-invalid @enderror is-valid" {{ $errors->has('messageContent') ? '' : 'is-valid' }} id="messageContent"  rows="8"></textarea>
             @error('messageContent')
             <div class="invalid-feedback">{{ $message }}</div>
             @enderror
