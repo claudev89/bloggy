@@ -6,10 +6,11 @@ use App\Events\DeleteExpiredSuscriptions;
 use App\Events\SuscripcionTokenCreated;
 use App\Listeners\SendSuscripcionConfirmationEmail;
 use App\Listeners\SendSuscriptionExpiredNotification;
+use App\Models\Like;
+use App\Observers\LikeObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -33,7 +34,7 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Like::observe(LikeObserver::class);
     }
 
     /**

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Relation;
 
 class Like extends Model
 {
@@ -16,6 +15,11 @@ class Like extends Model
     public function likeable()
     {
         return $this->morphTo()->withDefault();
+    }
+
+    public function notifications()
+    {
+        return $this->hasOne(Notification::class);
     }
 
 

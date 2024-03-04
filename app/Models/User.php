@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -76,4 +77,17 @@ class User extends Authenticatable
     {
         return $this->morphOne(Like::class, 'likeable');
     }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
+    public function allNotifications(): Builder
+    {
+        return Notification::whereHasMorph('notifiable', [Post::class, Comentario::class], function (Builder $query, $type){
+            $query->where('user_id', $this->id);
+        })->latest();
+    }
+
 }

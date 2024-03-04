@@ -38,7 +38,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
 
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="autoXpand">
                     @php($categories = \App\Models\Category::whereNull('parentCategory')->get())
                     @foreach($categories as $category)
                         @if($category->subcategory->isNotEmpty())
@@ -87,6 +87,79 @@
                             </li>
                         @endif
                     @else
+
+                        @auth
+                            @php($user = \App\Models\User::find(auth()->id()))
+                            @php($notifications = $user->allNotifications()->get())
+
+
+                            <li class="nav-item dropdown mt-1" id="notificaciones">
+                                <button class="btn btn-dark- dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-bell-fill"></i>
+                                    @if($notifications->count()>0)
+                                        @if($notifications->where('read', 0)->count()>0)
+                                            <span class="position-absolute top-0 start-90 translate-middle badge rounded-pill bg-danger">
+                                                    {{ $notifications->where('read', 0)->count() }}
+                                                </span>
+                                        @endif
+                                    @endif
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-dark" style="width: 22rem;">
+
+                            @forelse($notifications as $notification)
+                                @php( $user = \App\Models\User::find($notification->user_id))
+                                @if( $notification->notifiable_type == 'c')
+                                    @php( $comment = \App\Models\Comentario::find($notification->notifiable_id))
+                                @endif
+
+                                @if( $notification->type == 'l')
+                                    @php( $action = "<i class='bi bi-chat-square-heart'></i>  le ha dado like a tu " )
+                                @elseif( $notification->type == 'c')
+                                    @php( $action = "<i class='bi bi-chat-square'></i> ha comentado tu " )
+                                @endif
+
+                                @if( $notification->notifiable_type == 'p')
+                                            @php( $postN = \App\Models\Post::find($notification->notifiable_id ))
+                                    @php( $element = "<a href='".route('posts.show', $postN)."' class='text-reset' style='text-decoration: none'>publicación </a>")
+                                @elseif( $notification->notifiable_type == 'c')
+                                    @php( $postN = \App\Models\Post::find(\App\Models\Comentario::find($notification->notifiable_id)->id))
+                                    @if(!is_null($comment->respuestaA))
+                                        @php( $autor = \App\Models\User::find(\App\Models\Comentario::find($notification->notifiable_id)->autor ))
+                                        @php( $element = "respuesta al comentario de <a href='".route('users.show', $autor)."' class='text-reset' style='text-decoration: none'>".$autor->name."</a> en la <a href='".route('posts.show', $postN)."' class='text-reset' style='text-decoration: none'>publicación </a> de <a href='".route('users.show', $comment->post->user)."' class='text-reset' style='text-decoration: none'>".$comment->post->user->name."</a>")
+                                            @else
+                                                @php( $element = "comentario en la <a href='".route('posts.show', $postN)."' class='text-reset' style='text-decoration: none'> publicación</a> de <a href='".route('users.show', \App\Models\User::find($postN->autor))."' class='text-reset' style='text-decoration: none'>".\App\Models\User::find($postN->autor)->name."</a>" )
+                                        @endif
+                                @endif
+                                        <li><a class="dropdown-item p-0" href="#">
+                                                <div class="card p-0 ist-group-item list-group-item-action {{ $notification->read === 0 ? 'bg-secondary border-dark' :''}}">
+                                                    <div class="card-body p-1">
+                                                        <a href="#">
+                                                            <div class="row" onclick="window.location.href = '{{ route('notifications.show', ['notification' => $notification->id, 'postId' => $postN->id]) }}';" style="cursor: pointer;">
+                                                            <div class="col-3 pe-0"><a href="{{ route('users.show', $user) }}"><img class="w-100 rounded-circle" src="{{ $user->profile_photo_url }}"></a></div>
+                                                                <div class="col text-reset ps-2">
+                                                                    <strong><a href="{{ route('users.show', $user) }}" class="text-reset" style="text-decoration: none">{{ $user->name }} </a></strong><br>
+                                                                    {!! $action !!} {!! $element !!}
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </a></li>
+                            @empty
+                                <p class="alert alert-dark">No tienes notificaciones.<p/>
+                            @endforelse
+
+                                <div class="mt-2 d-flex justify-content-center align-items-center">
+                                    <button class="btn btn-outline-light btn-sm">
+                                        Ver todas las notificaciones
+                                    </button>
+                                </div>
+                                </ul>
+                            </li>
+
+                        @endauth
+
+
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -237,11 +310,11 @@
 </script>
 
 <style>
-    .dropdown:hover > .dropdown-menu {
+    #autoXpand .dropdown:hover > .dropdown-menu {
         display: block;
     }
 
-    .dropdown > .dropdown-toggle:active {
+    #autoXpand .dropdown > .dropdown-toggle:active {
         /*Without this, clicking will make it sticky*/
         pointer-events: none;
     }
@@ -251,7 +324,9 @@
             display: inline-grid;}
         }
 
-
+    #notificaciones .dropdown-toggle::after {
+        display: none; /* Oculta la flecha del dropdown */
+    }
 
 </style>
 </html>

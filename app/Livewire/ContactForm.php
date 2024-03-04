@@ -3,13 +3,18 @@
 namespace App\Livewire;
 
 use App\Mail\ContactoMailable;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Illuminate\Support\Facades\Mail;
 
 class ContactForm extends Component
 {
+    #[Validate]
     public $name;
+
+    #[Validate]
     public $email;
+    #[Validate]
     public $messageContent;
     public $showSpinner = false;
 
