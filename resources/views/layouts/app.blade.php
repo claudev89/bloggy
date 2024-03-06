@@ -90,7 +90,7 @@
 
                         @auth
                             @php($user = \App\Models\User::find(auth()->id()))
-                            @php($notifications = $user->allNotifications()->get())
+                            @php($notifications = \App\Models\Notification::forUser($user->id)->latest()->get())
 
 
                             <li class="nav-item dropdown mt-1" id="notificaciones">
@@ -107,7 +107,7 @@
                                 <ul class="dropdown-menu dropdown-menu-dark" style="width: 22rem;">
 
                             @forelse($notifications as $notification)
-                                @php( $user = \App\Models\User::find($notification->user_id))
+                                @php( $authorNotification = \App\Models\User::find($notification->user_id))
                                 @if( $notification->notifiable_type == 'c')
                                     @php( $comment = \App\Models\Comentario::find($notification->notifiable_id))
                                 @endif
@@ -122,7 +122,7 @@
                                             @php( $postN = \App\Models\Post::find($notification->notifiable_id ))
                                     @php( $element = "<a href='".route('posts.show', $postN)."' class='text-reset' style='text-decoration: none'>publicación </a>")
                                 @elseif( $notification->notifiable_type == 'c')
-                                    @php( $postN = \App\Models\Post::find(\App\Models\Comentario::find($notification->notifiable_id)->id))
+                                    @php( $postN = \App\Models\Post::find(\App\Models\Comentario::find($notification->notifiable_id)->post_id))
                                     @if(!is_null($comment->respuestaA))
                                         @php( $autor = \App\Models\User::find(\App\Models\Comentario::find($notification->notifiable_id)->autor ))
                                         @php( $element = "respuesta al comentario de <a href='".route('users.show', $autor)."' class='text-reset' style='text-decoration: none'>".$autor->name."</a> en la <a href='".route('posts.show', $postN)."' class='text-reset' style='text-decoration: none'>publicación </a> de <a href='".route('users.show', $comment->post->user)."' class='text-reset' style='text-decoration: none'>".$comment->post->user->name."</a>")
@@ -135,9 +135,9 @@
                                                     <div class="card-body p-1">
                                                         <a href="#">
                                                             <div class="row" onclick="window.location.href = '{{ route('notifications.show', ['notification' => $notification->id, 'postId' => $postN->id]) }}';" style="cursor: pointer;">
-                                                            <div class="col-3 pe-0"><a href="{{ route('users.show', $user) }}"><img class="w-100 rounded-circle" src="{{ $user->profile_photo_url }}"></a></div>
+                                                            <div class="col-3 pe-0"><a href="{{ route('users.show', $authorNotification) }}"><img class="w-100 rounded-circle" src="{{ $authorNotification->profile_photo_url }}"></a></div>
                                                                 <div class="col text-reset ps-2">
-                                                                    <strong><a href="{{ route('users.show', $user) }}" class="text-reset" style="text-decoration: none">{{ $user->name }} </a></strong><br>
+                                                                    <strong><a href="{{ route('users.show', $authorNotification) }}" class="text-reset" style="text-decoration: none">{{ $authorNotification->name }} </a></strong><br>
                                                                     {!! $action !!} {!! $element !!}
                                                                 </div>
                                                             </div>
