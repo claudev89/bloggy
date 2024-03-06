@@ -50,4 +50,25 @@ class Notification extends Model
         return $this->comentarios->belongsTo(User::class, 'autor');
     }
 
+    public function author()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function type()
+    {
+        return $this->morphTo('notifiable');
+    }
+
+    public function scopeForUser($query, $userId)
+    {
+        return $query->whereHasMorph('notifiable', [Post::class, Comentario::class], function ($query, $type) use ($userId) {
+            $query->whereHas('user', function ($query) use ($userId) {
+                $query->where('id', $userId);
+            });
+        });
+    }
+
+
+
 }

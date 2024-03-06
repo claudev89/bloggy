@@ -15,7 +15,7 @@
         @if($post->user)
             <div class="col-md-2 justify-content-center"
                  onclick="window.location.href='{{route('users.show', $post->user)}}'" style="cursor: pointer">
-                <img src="{{ $post->user->profile_photo_path }}" width="60" height="60" class="rounded-circle"><br>
+                <img src="{{ $post->user->profile_photo_url }}" width="60" height="60" class="rounded-circle"><br>
                 {{ $post->user->name }}
             </div>
         @else
@@ -44,8 +44,8 @@
                                     @forelse($this->comments->get() as $comentario)
                                         @php($fechaComentario = \Carbon\Carbon::parse($comentario->created_at))
                                         @if(is_null($comentario->respuestaA))
-                                            @if($comentario->user->profile_photo_path)
-                                                @php($profile_photo_url = $comentario->user->profile_photo_path)
+                                            @if($comentario->user->profile_photo_url)
+                                                @php($profile_photo_url = $comentario->user->profile_photo_url)
                                             @else
                                                 @php($profile_photo_url = '/images/pp.webp')
                                             @endif
@@ -102,7 +102,7 @@
                                                                     <div class="d-flex flex-start w-100 mt-3">
                                                                         <img
                                                                             class="rounded-circle shadow-1-strong me-3 profile_pct"
-                                                                            src="@if(is_null(auth()->user()->profile_photo_path)) /images/pp.webp @else(auth()->user()->profile_photo_path) @endif"
+                                                                            src="{{ auth()->user()->profile_photo_url }}"
                                                                             alt="{{auth()->user()->name}}"
                                                                             width="35"
                                                                             height="35"/>
@@ -136,11 +136,6 @@
                                                     @foreach($comentario->respuesta as $respuesta)
                                                         @php($fechaRespuesta = \Carbon\Carbon::parse($respuesta->created_at))
                                                         @if($comentario->id == $respuesta->respuestaA)
-                                                            @if(($respuesta->user->profile_photo_path))
-                                                                @php($profile_photo_url = $respuesta->user->profile_photo_path)
-                                                            @else
-                                                                @php($profile_photo_url = '/images/pp.webp')
-                                                            @endif
                                                             @if($respuesta->user)
                                                                 @php($author_name = $respuesta->user->name)
                                                             @else
@@ -153,14 +148,14 @@
                                                                        href="{{ route('users.show', $respuesta->user) }}">
                                                                         <img
                                                                             class="rounded-circle shadow-1-strong profile_pct"
-                                                                            src="{{ $profile_photo_url }}"
+                                                                            src="{{ $respuesta->user->profile_photo_url }}"
                                                                             alt="{{ $author_name }}"
                                                                             width="65" height="65"/>
                                                                     </a>
                                                                 @else
                                                                     <img
                                                                         class="rounded-circle shadow-1-strong profile_pct"
-                                                                        src="{{ $profile_photo_url }}"
+                                                                        src="/images/pp.jpg"
                                                                         alt="{{ $author_name }}"
                                                                         width="65" height="65"/>
                                                                 @endif
@@ -222,7 +217,7 @@
                         <div class="card-body p-4">
                             <div class="d-flex flex-start w-100">
                                 <img class="rounded-circle shadow-1-strong me-3 profile_pct"
-                                     src="@if(is_null(auth()->user()->profile_photo_path)) /images/pp.webp @else(auth()->user()->profile_photo_path) @endif"
+                                     src="{{auth()->user()->profile_photo_url}}"
                                      alt="{{auth()->user()->name}}"
                                      width="65"
                                      height="65"/>

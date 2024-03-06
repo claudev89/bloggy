@@ -35,4 +35,9 @@ class Comentario extends Model
     {
         return $this->hasMany(Notification::class);
     }
+
+    public function commentable()
+    {
+        return $this->morphTo();
+    }
 }
