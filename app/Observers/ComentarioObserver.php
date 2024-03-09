@@ -3,15 +3,40 @@
 namespace App\Observers;
 
 use App\Models\Comentario;
+use App\Models\Notification;
+use App\Models\Post;
+use App\Models\User;
 
 class ComentarioObserver
 {
     /**
      * Handle the Comentario "created" event.
      */
-    public function created(Comentario $comentario): void
+    public function creating(Comentario $comentario): void
     {
-        //
+        $crearNotificacion = false;
+       if($comentario->respuestaA !== null) {
+           $comentarioOriginal = Comentario::find($comentario->respuestaA);
+           if($comentarioOriginal->autor !== $comentario->autor) {
+               $crearNotificacion = true;
+           }
+       }
+       else {
+           $post = Post::find($comentario->post_id);
+           if($post->autor !== $comentario->autor) {
+               $crearNotificacion = true;
+           }
+       }
+       if($crearNotificacion){
+           $notification = Notification::create([
+               'user_id' => $comentario->autor,
+               'type' => 'c',
+               'notifiable_type' => $comentario->respuestaA == null ? 'p' : 'c',
+               'notifiable_id' => $comentario->respuestaA == null ? $comentario->post_id : $comentario->respuestaA,
+           ]);
+           $comentario->notification_id = $notification->id;
+           $crearNotificacion = false;
+       }
     }
 
     /**
