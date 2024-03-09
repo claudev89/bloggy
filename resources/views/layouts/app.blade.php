@@ -87,78 +87,7 @@
                             </li>
                         @endif
                     @else
-
-                        @auth
-                            @php($user = \App\Models\User::find(auth()->id()))
-                            @php($notifications = \App\Models\Notification::forUser($user->id)->latest()->get())
-
-
-                            <li class="nav-item dropdown mt-1" id="notificaciones">
-                                <button class="btn btn-dark- dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-bell-fill"></i>
-                                    @if($notifications->count()>0)
-                                        @if($notifications->where('read', 0)->count()>0)
-                                            <span class="position-absolute top-0 start-90 translate-middle badge rounded-pill bg-danger">
-                                                    {{ $notifications->where('read', 0)->count() }}
-                                                </span>
-                                        @endif
-                                    @endif
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-dark" style="width: 22rem;">
-
-                            @forelse($notifications as $notification)
-                                @php( $authorNotification = \App\Models\User::find($notification->user_id))
-                                @if( $notification->notifiable_type == 'c')
-                                    @php( $comment = \App\Models\Comentario::find($notification->notifiable_id))
-                                @endif
-
-                                @if( $notification->type == 'l')
-                                    @php( $action = "<i class='bi bi-chat-square-heart'></i>  le ha dado like a tu " )
-                                @elseif( $notification->type == 'c')
-                                    @php( $action = "<i class='bi bi-chat-square'></i> ha comentado tu " )
-                                @endif
-
-                                @if( $notification->notifiable_type == 'p')
-                                            @php( $postN = \App\Models\Post::find($notification->notifiable_id ))
-                                    @php( $element = "<a href='".route('posts.show', $postN)."' class='text-reset' style='text-decoration: none'>publicación </a>")
-                                @elseif( $notification->notifiable_type == 'c')
-                                    @php( $postN = \App\Models\Post::find(\App\Models\Comentario::find($notification->notifiable_id)->post_id))
-                                    @if(!is_null($comment->respuestaA))
-                                        @php( $autor = \App\Models\User::find(\App\Models\Comentario::find($notification->notifiable_id)->autor ))
-                                        @php( $element = "respuesta al comentario de <a href='".route('users.show', $autor)."' class='text-reset' style='text-decoration: none'>".$autor->name."</a> en la <a href='".route('posts.show', $postN)."' class='text-reset' style='text-decoration: none'>publicación </a> de <a href='".route('users.show', $comment->post->user)."' class='text-reset' style='text-decoration: none'>".$comment->post->user->name."</a>")
-                                            @else
-                                                @php( $element = "comentario en la <a href='".route('posts.show', $postN)."' class='text-reset' style='text-decoration: none'> publicación</a> de <a href='".route('users.show', \App\Models\User::find($postN->autor))."' class='text-reset' style='text-decoration: none'>".\App\Models\User::find($postN->autor)->name."</a>" )
-                                        @endif
-                                @endif
-                                        <li><a class="dropdown-item p-0" href="#">
-                                                <div class="card p-0 ist-group-item list-group-item-action {{ $notification->read === 0 ? 'bg-secondary border-dark' :''}}">
-                                                    <div class="card-body p-1">
-                                                        <a href="#">
-                                                            <div class="row" onclick="window.location.href = '{{ route('notifications.show', ['notification' => $notification->id, 'postId' => $postN->id]) }}';" style="cursor: pointer;">
-                                                            <div class="col-3 pe-0"><a href="{{ route('users.show', $authorNotification) }}"><img class="w-100 rounded-circle" src="{{ $authorNotification->profile_photo_url }}"></a></div>
-                                                                <div class="col text-reset ps-2">
-                                                                    <strong><a href="{{ route('users.show', $authorNotification) }}" class="text-reset" style="text-decoration: none">{{ $authorNotification->name }} </a></strong><br>
-                                                                    {!! $action !!} {!! $element !!}
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </a></li>
-                            @empty
-                                <p class="alert alert-dark">No tienes notificaciones.<p/>
-                            @endforelse
-
-                                <div class="mt-2 d-flex justify-content-center align-items-center">
-                                    <button class="btn btn-outline-light btn-sm">
-                                        Ver todas las notificaciones
-                                    </button>
-                                </div>
-                                </ul>
-                            </li>
-
-                        @endauth
-
+                        <livewire:notifications ></livewire:notifications>
 
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
@@ -190,7 +119,7 @@
             <!-- Contenido principal de la página -->
             <div class="col-md-9">
                 <div class="card p-3">
-                @yield('content')
+                    @yield('content')
                 </div>
             </div>
 
@@ -198,57 +127,87 @@
             <div class="col-md-3 pt-3 card">
                 <nav>
                     <div class="nav nav-tabs" id="3postsBLD" role="tablist">
-                        <button class="nav-link active" id="nav-recents-tab" data-bs-toggle="tab" data-bs-target="#nav-recents" type="button" role="tab" aria-controls="nav-recents" aria-selected="true" style="color: inherit">Recientes</button>
-                        <button class="nav-link" id="nav-populars-tab" data-bs-toggle="tab" data-bs-target="#nav-populars" type="button" role="tab" aria-controls="nav-populars" aria-selected="false" style="color: inherit">Populares</button>
-                        <button class="nav-link" id="nav-random-tab" data-bs-toggle="tab" data-bs-target="#nav-random" type="button" role="tab" aria-controls="nav-random" aria-selected="false" style="color: inherit">Random</button>
+                        <button class="nav-link active" id="nav-recents-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-recents" type="button" role="tab" aria-controls="nav-recents"
+                                aria-selected="true" style="color: inherit">Recientes
+                        </button>
+                        <button class="nav-link" id="nav-populars-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-populars" type="button" role="tab" aria-controls="nav-populars"
+                                aria-selected="false" style="color: inherit">Populares
+                        </button>
+                        <button class="nav-link" id="nav-random-tab" data-bs-toggle="tab" data-bs-target="#nav-random"
+                                type="button" role="tab" aria-controls="nav-random" aria-selected="false"
+                                style="color: inherit">Random
+                        </button>
                     </div>
                 </nav>
                 <div class="tab-content mt-2" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="nav-recents" role="tabpanel" aria-labelledby="nav-recents-tab" tabindex="0">
+                    <div class="tab-pane fade show active" id="nav-recents" role="tabpanel"
+                         aria-labelledby="nav-recents-tab" tabindex="0">
                         @foreach($postsOrderByDate as $post)
                             <div class="card mb-2" style="max-width: 540px;">
                                 <div class="row g-0">
-                                    <div class="col-md-4 mt-4">
-                                        <a href="{{ route('posts.show', $post) }}"><img src="{{ $post->image }}" class="img-fluid rounded-start" alt="{{ $post->description }}"></a>
+                                    <div class="col-md-4 mt-2 mb-2">
+                                        <a href="{{ route('posts.show', $post) }}"><img src="{{ $post->image }}"
+                                                                                        class="img-fluid rounded-start h-100"
+                                                                                        alt="{{ $post->description }}"></a>
                                     </div>
                                     <div class="col-md-8">
                                         <div class="card-body">
-                                            <a style="color: inherit; text-decoration: none" href="{{ route('posts.show', $post) }}"><h6 class="card-title">{{ $post->titulo }}</h6></a>
-                                            <p class="card-text"><small class="text-body-secondary">{{ date('d/m/Y', strtotime($post->created_at)) }}</small></p>
+                                            <a style="color: inherit; text-decoration: none"
+                                               href="{{ route('posts.show', $post) }}"><h6
+                                                    class="card-title">{{ $post->titulo }}</h6></a>
+                                            <p class="card-text"><small
+                                                    class="text-body-secondary">{{ date('d/m/Y', strtotime($post->created_at)) }}</small>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
                     </div>
-                    <div class="tab-pane fade" id="nav-populars" role="tabpanel" aria-labelledby="nav-populars-tab" tabindex="0">
+                    <div class="tab-pane fade" id="nav-populars" role="tabpanel" aria-labelledby="nav-populars-tab"
+                         tabindex="0">
                         @foreach($postsOrderByPopularity as $post)
                             <div class="card mb-2" style="max-width: 540px;">
                                 <div class="row g-0">
-                                    <div class="col-md-4 mt-4">
-                                        <a href="{{ route('posts.show', $post) }}"><img src="{{ $post->image }}" class="img-fluid rounded-start" alt="{{ $post->description }}"></a>
+                                    <div class="col-md-4 mt-2 mb-2">
+                                        <a href="{{ route('posts.show', $post) }}"><img src="{{ $post->image }}"
+                                                                                        class="img-fluid rounded-start h-100"
+                                                                                        alt="{{ $post->description }}"></a>
                                     </div>
                                     <div class="col-md-8">
                                         <div class="card-body">
-                                            <a style="color: inherit; text-decoration: none" href="{{ route('posts.show', $post) }}"><h6 class="card-title">{{ $post->titulo }}</h6></a>
-                                            <p class="card-text"><small class="text-body-secondary">{{ date('d/m/Y', strtotime($post->created_at)) }}</small></p>
+                                            <a style="color: inherit; text-decoration: none"
+                                               href="{{ route('posts.show', $post) }}"><h6
+                                                    class="card-title">{{ $post->titulo }}</h6></a>
+                                            <p class="card-text"><small
+                                                    class="text-body-secondary">{{ date('d/m/Y', strtotime($post->created_at)) }}</small>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
                     </div>
-                    <div class="tab-pane fade" id="nav-random" role="tabpanel" aria-labelledby="nav-random-tab" tabindex="0">
+                    <div class="tab-pane fade" id="nav-random" role="tabpanel" aria-labelledby="nav-random-tab"
+                         tabindex="0">
                         @foreach($postsOrderRandomOrder as $post)
                             <div class="card mb-2" style="max-width: 540px;">
                                 <div class="row g-0">
-                                    <div class="col-md-4 mt-4">
-                                        <a href="{{ route('posts.show', $post) }}"><img src="{{ $post->image }}" class="img-fluid rounded-start" alt="{{ $post->description }}"></a>
+                                    <div class="col-md-4 mt-2 mb-2">
+                                        <a href="{{ route('posts.show', $post) }}"><img src="{{ $post->image }}"
+                                                                                        class="img-fluid rounded-start h-100"
+                                                                                        alt="{{ $post->description }}"></a>
                                     </div>
                                     <div class="col-md-8">
                                         <div class="card-body">
-                                            <a style="color: inherit; text-decoration: none" href="{{ route('posts.show', $post) }}"><h6 class="card-title">{{ $post->titulo }}</h6></a>
-                                            <p class="card-text"><small class="text-body-secondary">{{ date('d/m/Y', strtotime($post->created_at)) }}</small></p>
+                                            <a style="color: inherit; text-decoration: none"
+                                               href="{{ route('posts.show', $post) }}"><h6
+                                                    class="card-title">{{ $post->titulo }}</h6></a>
+                                            <p class="card-text"><small
+                                                    class="text-body-secondary">{{ date('d/m/Y', strtotime($post->created_at)) }}</small>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -258,38 +217,45 @@
                 </div>
                 <hr>
                 <ul>
-                    <li ><a style="color: inherit" class="text-decoration-none" href="/">Inicio</a></li>
+                    <li><a style="color: inherit" class="text-decoration-none" href="/">Inicio</a></li>
                     @foreach($categories as $category)
                         @if($category->subcategory->isNotEmpty())
-                            <li ><a style="color: inherit" class="text-decoration-none" href="{{ route('categories.show', $category) }}">{{ $category->name }}</li>
+                            <li><a style="color: inherit" class="text-decoration-none"
+                                   href="{{ route('categories.show', $category) }}">{{ $category->name }}</li>
                             @foreach($category->subcategory as $subcategory) @endforeach
                             <ul>
-                                <li ><a style="color: inherit" class="text-decoration-none" href="{{ route('categories.show', $subcategory) }}">{{ $subcategory->name }}</li>
+                                <li><a style="color: inherit" class="text-decoration-none"
+                                       href="{{ route('categories.show', $subcategory) }}">{{ $subcategory->name }}</li>
                             </ul>
                         @else
-                            <li ><a style="color: inherit" class="text-decoration-none" href="{{ route('categories.show', $category) }}">{{ $category->name }}</li>
+                            <li><a style="color: inherit" class="text-decoration-none"
+                                   href="{{ route('categories.show', $category) }}">{{ $category->name }}</li>
                         @endif
                     @endforeach
-                    <li ><a style="color: inherit" class="text-decoration-none" href="{{ route('contacto.index') }}">Contacto</a></li>
+                    <li><a style="color: inherit" class="text-decoration-none" href="{{ route('contacto.index') }}">Contacto</a>
+                    </li>
                 </ul>
             </div>
-                <!-- Fin de la barra latetal derecha -->
-            </div>
-        </div>
-
-        <div class="container mb-3">
-            <hr>
-            <div class="row align-content-center">
-                <div class="btn-group" role="group" aria-label="Footer Menu" id="footerMenu">
-                    <button onclick="location.href = '/'" class="btn btn-outline-light">Inicio</button>
-                    @foreach($categories as $category)
-                        <button onclick="location.href = '{{ route('categories.show', $category) }}'" type="button" class="btn btn-outline-light">{{ $category->name }}</button>
-                    @endforeach
-                    <button onclick="location.href = '{{ route('contacto.index') }}'" type="button" class="btn btn-outline-light">Contacto</button>
-                </div>
-        </div>
+            <!-- Fin de la barra latetal derecha -->
         </div>
     </div>
+
+    <div class="container mb-3">
+        <hr>
+        <div class="row align-content-center">
+            <div class="btn-group" role="group" aria-label="Footer Menu" id="footerMenu">
+                <button onclick="location.href = '/'" class="btn btn-outline-light">Inicio</button>
+                @foreach($categories as $category)
+                    <button onclick="location.href = '{{ route('categories.show', $category) }}'" type="button"
+                            class="btn btn-outline-light">{{ $category->name }}</button>
+                @endforeach
+                <button onclick="location.href = '{{ route('contacto.index') }}'" type="button"
+                        class="btn btn-outline-light">Contacto
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 </body>
 
@@ -320,9 +286,10 @@
     }
 
     @media screen and (max-width: 768px) {
-        #footerMenu{
-            display: inline-grid;}
+        #footerMenu {
+            display: inline-grid;
         }
+    }
 
     #notificaciones .dropdown-toggle::after {
         display: none; /* Oculta la flecha del dropdown */

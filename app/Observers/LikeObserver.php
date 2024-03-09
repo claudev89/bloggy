@@ -18,7 +18,9 @@ class LikeObserver
                                             ->where('notifiable_type', $like->likeable_type)
                                             ->where('notifiable_id', $like->likeable_id)
                                             ->first();
-        if(!$existingNotification){
+
+        $authorId = $like->likeable->user->id;
+        if(!$existingNotification && $like->user_id != $authorId){
             $notification = Notification::create([
                 'user_id' => $like->user_id,
                 'type' => 'l',
