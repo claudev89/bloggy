@@ -4,6 +4,8 @@ namespace App\Livewire;
 
 use App\Models\Notification;
 use Illuminate\Database\Eloquent\Model;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Reactive;
 use Livewire\Component;
 use App\Models\Like;
@@ -12,17 +14,20 @@ class LikeButton extends Component
 {
     #[Reactive]
     public $likeable;
+
     public $likeableType;
     public $liked = false;
-    public $likeCount;
 
+    public $likeCount;
 
     public function mount($likeable)
     {
         $this->likeable = $likeable;
         $this->likeableType = $likeable->getMorphClass();
         $this->checkIfLiked();
+
     }
+
 
     public function like()
     {
@@ -39,6 +44,7 @@ class LikeButton extends Component
     {
         $this->liked = $this->likeable->likes()->where('user_id', auth()->id())->exists();
     }
+
 
     public function render()
     {

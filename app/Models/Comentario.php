@@ -40,4 +40,5 @@ class Comentario extends Model
     {
         return $this->morphTo();
     }
+
 }

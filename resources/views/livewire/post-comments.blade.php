@@ -3,7 +3,7 @@
         <div class="col-10">
             <div class="row justify-content-end">
                 <div class="col-1 align-content-center">
-                    <livewire:LikeButton :likeable="$post" :key="'like-post-'.$post->id"/>
+                    <livewire:LikeButton :likeable="$post" :key="'like-post-'.$post->id" />
                 </div>
                 <div class="col-1 align-content-center">
                     <a href="{{ auth()->check() ? '#comment' : route('login') }}" style="color: inherit"><i
@@ -70,7 +70,7 @@
                                                          height="65"/>
                                                 @endif
                                                 <div class="flex-grow-1 flex-shrink-1">
-                                                    <div>
+                                                    <div id="{{ "comentario-".$comentario->id }}" wire:key="{{ "comentario-".$comentario->id }}">
                                                         <div class="d-flex justify-content-between align-items-center">
                                                             <p class="mb-1 flex-fill">
                                                                 {{ $author_name }}<span
@@ -80,18 +80,44 @@
                                                                         data-mdb-tooltip-init
                                                                         title="{{ $fechaComentario->isoFormat('LLLL') }}">{{ $fechaComentario->diffForHumans() }}</a></span>
                                                             </p>
-                                                            <div @auth() wire:click="displayReplyForm({{ $comentario->id }})"
-                                                                 style="cursor: pointer" @endauth>
-                                                                <i class="bi bi-reply me-1"></i><span
-                                                                    class="small d-block d-md-inline d-none">Responder</span>
-                                                            </div>
-                                                            <div class="ms-2">
-                                                                <livewire:LikeButton :likeable="$comentario"
-                                                                                     :key="'likeButton-' .  $comentario->id"/>
+                                                            <div class ="d-flex align-content-end align-content-start">
+                                                                <div @auth() wire:click="displayReplyForm({{ $comentario->id }})"
+                                                                     style="cursor: pointer" @endauth>
+                                                                    <i class="bi bi-reply me-1"></i><span
+                                                                        class="small d-block d-md-inline d-none">Responder</span>
+                                                                </div>
+                                                                <div class="ms-2">
+                                                                    <livewire:LikeButton :likeable="$comentario" :key="'likeButton-'.$comentario->id" :$comentario />
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <p class="small mb-0">
                                                             {{ $comentario->cuerpo }}
+                                                        @if(auth()->id() === $comentario->autor)
+                                                            <button type="button" class="btn p-0 ms-1" data-bs-toggle="modal" data-bs-target="#deleteComment">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+
+                                                        <div class="modal fade" id="deleteComment" tabindex="-1" aria-labelledby="deleteComment" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Eliminar comentario</h1>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        ¿Estás seguro que deseas eliminar el comentario: <br>
+                                                                        "<b>{{ $comentario->cuerpo }}</b>" ?
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                        <button wire:click="deleteComment({{ $comentario }})" type="button" class="btn btn-danger"><i class="bi bi-trash"></i> Eliminar</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        @endif
                                                         </p>
                                                     </div>
 
@@ -142,7 +168,7 @@
                                                                 @php($author_name = "<i>Cuenta Eliminada</i>")
                                                             @endif
 
-                                                            <div class="d-flex flex-start mt-4">
+                                                            <div class="d-flex flex-start mt-4" id="{{"respuesta-".$respuesta->id}}" wire:key="{{"respuesta-".$respuesta->id}}">
                                                                 @if($respuesta->user)
                                                                     <a class="me-3"
                                                                        href="{{ route('users.show', $respuesta->user) }}">

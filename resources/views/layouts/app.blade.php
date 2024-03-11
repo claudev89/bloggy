@@ -87,7 +87,7 @@
                             </li>
                         @endif
                     @else
-                        <livewire:notifications ></livewire:notifications>
+                        <livewire:notifications />
 
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
