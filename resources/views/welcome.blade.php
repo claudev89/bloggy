@@ -22,27 +22,32 @@
                         <small
                             class="d-inline-flex mb-2 px-2 py-1 fw-semibold text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-2 text-uppercase">
                             @if ($fechaPost->year === now()->year)
-                                {{ $fechaPost->isoFormat('D MMM') }}
+                                {{ substr($fechaPost->isoFormat('D MMM'), 0, -1) }}
                             @else
                                 {{ $fechaPost->isoFormat('D MMM YYY') }}
                             @endif
                         </small>
-                        <text class="text-body-secondary">Posteado por
+                        <text class="text-body-secondary">Publicado por
                             @if($post->user)
                                 <a style="text-decoration: none; color: inherit"
-                                   href="{{ route('users.show', $post->user ) }}">{{ $post->user->name }}</a>
+                                   href="{{ route('users.show', $post->user ) }}"><b>{{ $post->user->name }}</b></a>
                             @else
                                 usuario eliminado
                             @endif
                             en <a style="text-decoration: none; color: inherit"
-                                  href="{{ route('categories.show', $post->categories->first() ) }}">{{ $post->categories->first()->name }} </a>
+                                  href="{{ route('categories.show', $post->categories->first() ) }}"><b>{{ $post->categories->first()->name }}</b> </a>
                         </text>
                         <div class="row">
-                            <p class="crop-text-2 col-9 col-md-10">{{ $post->description }}</p>
-                            <div class="col-1">
+                            <p class="crop-text-2">{{ $post->description }}</p>
+                        </div>
+                        <div class="d-flex flex-row justify-content-end no-gutters">
+                            <div class="text-center">
+                                <i class="bi bi-eye"></i> <br> {{ $post->views }}
+                            </div>
+                            <div class="text-center ms-2 me-2">
                                 <i class="bi bi-heart"></i> <br>{{ $post->likes->count() }}</br>
                             </div>
-                            <div class="col-1">
+                            <div class="text-center">
                                 <i class="bi bi-chat-square"></i> <br>{{ $post->comentarios->count() }}</br>
                             </div>
                         </div>

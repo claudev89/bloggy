@@ -2,8 +2,8 @@
     <div class="row">
         <div class="col-10">
             <div class="row justify-content-end">
-                <div class="col-1 align-content-center">
-                    <livewire:LikeButton :likeable="$post" :key="'like-post-'.$post->id"/>
+                <div class="col-1 align-content-center" id="post-{{$post->id}}">
+                    <livewire:LikeButton :likeable="$post" :key="'like-post-'.$post->id" />
                 </div>
                 <div class="col-1 align-content-center">
                     <a href="{{ auth()->check() ? '#comment' : route('login') }}" style="color: inherit"><i
@@ -70,7 +70,7 @@
                                                          height="65"/>
                                                 @endif
                                                 <div class="flex-grow-1 flex-shrink-1">
-                                                    <div>
+                                                    <div id="{{ "comentario-".$comentario->id }}" wire:key="{{ "comentario-".$comentario->id }}">
                                                         <div class="d-flex justify-content-between align-items-center">
                                                             <p class="mb-1 flex-fill">
                                                                 {{ $author_name }}<span
@@ -80,18 +80,20 @@
                                                                         data-mdb-tooltip-init
                                                                         title="{{ $fechaComentario->isoFormat('LLLL') }}">{{ $fechaComentario->diffForHumans() }}</a></span>
                                                             </p>
-                                                            <div @auth() wire:click="displayReplyForm({{ $comentario->id }})"
-                                                                 style="cursor: pointer" @endauth>
-                                                                <i class="bi bi-reply me-1"></i><span
-                                                                    class="small d-block d-md-inline d-none">Responder</span>
-                                                            </div>
-                                                            <div class="ms-2">
-                                                                <livewire:LikeButton :likeable="$comentario"
-                                                                                     :key="'likeButton-' .  $comentario->id"/>
+                                                            <div class ="d-flex align-content-end align-content-start">
+                                                                <div @auth() wire:click="displayReplyForm({{ $comentario->id }})"
+                                                                     style="cursor: pointer" @endauth>
+                                                                    <i class="bi bi-reply me-1"></i><span
+                                                                        class="small d-block d-md-inline d-none">Responder</span>
+                                                                </div>
+                                                                <div class="ms-2" id="like-to-comment-{{$comentario->id}}">
+                                                                    <livewire:LikeButton :likeable="$comentario" :key="'likeButton-'.$comentario->id" :$comentario />
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <p class="small mb-0">
                                                             {{ $comentario->cuerpo }}
+                                                            @include('partials.delete', ['objeto' => $comentario, 'type' => 'comentario'])
                                                         </p>
                                                     </div>
 
@@ -107,7 +109,7 @@
                                                                             width="35"
                                                                             height="35"/>
                                                                         <div class="w-100">
-                                                                            <div class="form-outline mb-2">
+                                                                            <div class="form-outline mb-2" wire:keydown.ctrl.enter="replyToComment">
                                                                             <textarea class="form-control" id="replyBody"
                                                                                       rows="4"
                                                                                       wire:model="replyBody"></textarea>
@@ -115,14 +117,18 @@
                                                                             @error('replyBody')
                                                                                 <span class="alert alert-danger">{{ $message }}</span>
                                                                             @enderror
-                                                                            <div
-                                                                                class="d-flex justify-content-end mt-3">
-                                                                                <button wire:click="replyToComment"
-                                                                                        class="btn btn-outline-light">
-                                                                                    Responder <i
-                                                                                        class="fas fa-long-arrow-alt-right ms-1"></i>
-                                                                                </button>
+                                                                            <div class="d-flex justify-content-between">
+                                                                                <span class="small text-secondary">Puedes presionar <kbd>Ctrl</kbd> + <kbd>Enter</kbd>  para dejar tu respuesta.</span>
+
+                                                                                <div>
+                                                                                    <button wire:click="replyToComment"
+                                                                                            class="btn btn-outline-light">
+                                                                                        Responder <i
+                                                                                            class="fas fa-long-arrow-alt-right ms-1"></i>
+                                                                                    </button>
+                                                                                </div>
                                                                             </div>
+
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -142,7 +148,7 @@
                                                                 @php($author_name = "<i>Cuenta Eliminada</i>")
                                                             @endif
 
-                                                            <div class="d-flex flex-start mt-4">
+                                                            <div class="d-flex flex-start mt-4" id="{{"respuesta-".$respuesta->id}}" wire:key="{{"respuesta-".$respuesta->id}}">
                                                                 @if($respuesta->user)
                                                                     <a class="me-3"
                                                                        href="{{ route('users.show', $respuesta->user) }}">
@@ -162,7 +168,7 @@
                                                                 <div class="flex-grow-1 flex-shrink-1">
                                                                     <div>
                                                                         <div
-                                                                            class="d-flex justify-content-between align-items-center">
+                                                                            class="d-flex justify-content-between align-items-center" id="reply-"{{$respuesta->id}}>
                                                                             <p class="mb-1">
                                                                                 {{ $author_name }}<span
                                                                                     class="small text-secondary d-block d-md-inline"> - <a
@@ -176,6 +182,7 @@
                                                                         </div>
                                                                         <p class="small mb-0">
                                                                             {{ $respuesta->cuerpo }}
+                                                                           @include('partials.delete', ['objeto' => $respuesta, 'type' => 'respuesta'])
                                                                         </p>
                                                                     </div>
                                                                 </div>
@@ -223,17 +230,22 @@
                                      height="65"/>
                                 <div class="w-100">
                                     <h5>Deja un comentario</h5>
-                                    <div class="form-outline mb-2">
+                                    <div class="form-outline mb-2" wire:keydown.ctrl.enter="postComment">
                                     <textarea class="form-control" id="comment" rows="4"
                                               wire:model="comment"></textarea>
                                     </div>
                                     @if($errors->isNotEmpty())
                                         <div class="alert alert-danger">{{ $errors }}</div>
                                     @endif
-                                    <div class="d-flex justify-content-end mt-3">
-                                        <button wire:click="postComment" class="btn btn-outline-light">
-                                            Comentar <i class="fas fa-long-arrow-alt-right ms-1"></i>
-                                        </button>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="small text-secondary">Puedes presionar <kbd>Ctrl</kbd> + <kbd>Enter</kbd>  para dejar tu comentario.</span>
+                                        <div>
+                                            <button wire:click="postComment"
+                                                    class="btn btn-outline-light">
+                                                Comentar <i
+                                                    class="fas fa-long-arrow-alt-right ms-1"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -244,4 +256,3 @@
         </div>
     @endauth
 </div>
-

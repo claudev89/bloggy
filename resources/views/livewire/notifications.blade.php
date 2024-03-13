@@ -80,7 +80,7 @@
                         @php($donde = "")
                     @endif
                     <li><a class="dropdown-item p-0" href="#">
-                            <div
+                            <div wire:key="{{$notification->id}}"
                                 class="card p-0 ist-group-item list-group-item-action {{ $notification->read === 0 ? 'bg-secondary border-dark' :''}}">
                                 <div class="card-body p-1">
                                     <a href="#">

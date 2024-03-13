@@ -35,11 +35,17 @@ class PostComments extends Component
         $this->reset('comment');
     }
 
+    public function deleteComment(Comentario $commentToDelete)
+    {
+        $commentToDelete->delete();
+    }
+
     #[Computed()]
     public function comments()
     {
         return $this?->post?->comentarios()->latest();
     }
+
 
     public function displayReplyForm($commentId)
     {
@@ -58,6 +64,7 @@ class PostComments extends Component
         $this->replyBody = '';
         $this->showReplyForm = null;
     }
+
 
     public function render()
     {

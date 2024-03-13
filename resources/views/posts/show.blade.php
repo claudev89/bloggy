@@ -17,7 +17,7 @@
     </nav>
 
     <div class="text-secondary mb-3">
-        Posteado el {{ date('d/m/Y', strtotime($post->created_at)) }}
+        Publicado el {{ date('d/m/Y', strtotime($post->created_at)) }} | Leído {{$post->views === 1 ? $post->views." vez": $post->views." veces" }}
     </div>
 
     <p>{{ $post->description }}</p>
