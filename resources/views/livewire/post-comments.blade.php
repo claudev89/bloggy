@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-10">
             <div class="row justify-content-end">
-                <div class="col-1 align-content-center">
+                <div class="col-1 align-content-center" id="post-{{$post->id}}">
                     <livewire:LikeButton :likeable="$post" :key="'like-post-'.$post->id" />
                 </div>
                 <div class="col-1 align-content-center">
@@ -86,38 +86,14 @@
                                                                     <i class="bi bi-reply me-1"></i><span
                                                                         class="small d-block d-md-inline d-none">Responder</span>
                                                                 </div>
-                                                                <div class="ms-2">
+                                                                <div class="ms-2" id="like-to-comment-{{$comentario->id}}">
                                                                     <livewire:LikeButton :likeable="$comentario" :key="'likeButton-'.$comentario->id" :$comentario />
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <p class="small mb-0">
                                                             {{ $comentario->cuerpo }}
-                                                        @if(auth()->id() === $comentario->autor)
-                                                            <button type="button" class="btn p-0 ms-1" data-bs-toggle="modal" data-bs-target="#deleteComment">
-                                                                <i class="bi bi-trash"></i>
-                                                            </button>
-
-                                                        <div class="modal fade" id="deleteComment" tabindex="-1" aria-labelledby="deleteComment" aria-hidden="true">
-                                                            <div class="modal-dialog">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Eliminar comentario</h1>
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        ¿Estás seguro que deseas eliminar el comentario: <br>
-                                                                        "<b>{{ $comentario->cuerpo }}</b>" ?
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                                        <button wire:click="deleteComment({{ $comentario }})" type="button" class="btn btn-danger"><i class="bi bi-trash"></i> Eliminar</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        @endif
+                                                            @include('partials.delete', ['objeto' => $comentario, 'type' => 'comentario'])
                                                         </p>
                                                     </div>
 
@@ -133,7 +109,7 @@
                                                                             width="35"
                                                                             height="35"/>
                                                                         <div class="w-100">
-                                                                            <div class="form-outline mb-2">
+                                                                            <div class="form-outline mb-2" wire:keydown.ctrl.enter="replyToComment">
                                                                             <textarea class="form-control" id="replyBody"
                                                                                       rows="4"
                                                                                       wire:model="replyBody"></textarea>
@@ -141,14 +117,18 @@
                                                                             @error('replyBody')
                                                                                 <span class="alert alert-danger">{{ $message }}</span>
                                                                             @enderror
-                                                                            <div
-                                                                                class="d-flex justify-content-end mt-3">
-                                                                                <button wire:click="replyToComment"
-                                                                                        class="btn btn-outline-light">
-                                                                                    Responder <i
-                                                                                        class="fas fa-long-arrow-alt-right ms-1"></i>
-                                                                                </button>
+                                                                            <div class="d-flex justify-content-between">
+                                                                                <span class="small text-secondary">Puedes presionar <kbd>Ctrl</kbd> + <kbd>Enter</kbd>  para dejar tu respuesta.</span>
+
+                                                                                <div>
+                                                                                    <button wire:click="replyToComment"
+                                                                                            class="btn btn-outline-light">
+                                                                                        Responder <i
+                                                                                            class="fas fa-long-arrow-alt-right ms-1"></i>
+                                                                                    </button>
+                                                                                </div>
                                                                             </div>
+
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -188,7 +168,7 @@
                                                                 <div class="flex-grow-1 flex-shrink-1">
                                                                     <div>
                                                                         <div
-                                                                            class="d-flex justify-content-between align-items-center">
+                                                                            class="d-flex justify-content-between align-items-center" id="reply-"{{$respuesta->id}}>
                                                                             <p class="mb-1">
                                                                                 {{ $author_name }}<span
                                                                                     class="small text-secondary d-block d-md-inline"> - <a
@@ -202,6 +182,7 @@
                                                                         </div>
                                                                         <p class="small mb-0">
                                                                             {{ $respuesta->cuerpo }}
+                                                                           @include('partials.delete', ['objeto' => $respuesta, 'type' => 'respuesta'])
                                                                         </p>
                                                                     </div>
                                                                 </div>
@@ -249,17 +230,22 @@
                                      height="65"/>
                                 <div class="w-100">
                                     <h5>Deja un comentario</h5>
-                                    <div class="form-outline mb-2">
+                                    <div class="form-outline mb-2" wire:keydown.ctrl.enter="postComment">
                                     <textarea class="form-control" id="comment" rows="4"
                                               wire:model="comment"></textarea>
                                     </div>
                                     @if($errors->isNotEmpty())
                                         <div class="alert alert-danger">{{ $errors }}</div>
                                     @endif
-                                    <div class="d-flex justify-content-end mt-3">
-                                        <button wire:click="postComment" class="btn btn-outline-light">
-                                            Comentar <i class="fas fa-long-arrow-alt-right ms-1"></i>
-                                        </button>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="small text-secondary">Puedes presionar <kbd>Ctrl</kbd> + <kbd>Enter</kbd>  para dejar tu comentario.</span>
+                                        <div>
+                                            <button wire:click="postComment"
+                                                    class="btn btn-outline-light">
+                                                Comentar <i
+                                                    class="fas fa-long-arrow-alt-right ms-1"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -270,4 +256,3 @@
         </div>
     @endauth
 </div>
-
