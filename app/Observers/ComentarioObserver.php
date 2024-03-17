@@ -50,9 +50,12 @@ class ComentarioObserver
     /**
      * Handle the Comentario "deleted" event.
      */
-    public function deleted(Comentario $comentario): void
+    public function deleting(Comentario $comentario): void
     {
-        //
+        if(isset($comentario->notification_id)){
+            $notification = Notification::findOrFail($comentario->notification_id);
+            $notification->delete();
+        }
     }
 
     /**

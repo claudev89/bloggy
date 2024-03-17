@@ -3,7 +3,6 @@
         @php($user = \App\Models\User::find(auth()->id()))
         @php($notifications = \App\Models\Notification::forUser($user->id)->latest()->get())
 
-
         <li class="nav-item dropdown mt-1" id="notificaciones">
             <button class="btn btn-dark- dropdown-toggle" data-bs-toggle="dropdown"
                     aria-expanded="false">
@@ -17,7 +16,7 @@
                     @endif
                 @endif
             </button>
-            <ul class="dropdown-menu dropdown-menu-dark" style="width: 22rem;">
+            <ul class="dropdown-menu dropdown-menu-dark pe-1" style="width: 22rem; max-height: 88rem; overflow-y: auto; overflow-x: hidden">
 
                 @php($action = "")
                 @php($element = "")
@@ -79,7 +78,12 @@
                     @if($element == "publicación.")
                         @php($donde = "")
                     @endif
-                    <li><a class="dropdown-item p-0" href="#">
+                    @php($noti = \App\Models\Notification::findOrFail($notification->id))
+                    @if($noti->notifiable_type == 'c')
+
+                        @else
+                    @endif
+                    <li><a class="dropdown-item p-0 bg-" href="#">
                             <div wire:key="{{$notification->id}}"
                                 class="card p-0 ist-group-item list-group-item-action {{ $notification->read === 0 ? 'bg-secondary border-dark' :''}}">
                                 <div class="card-body p-1">
@@ -110,11 +114,6 @@
                     <p class="alert alert-dark">No tienes notificaciones.<p/>
                 @endforelse
 
-                <div class="mt-2 d-flex justify-content-center align-items-center">
-                    <button class="btn btn-outline-light btn-sm">
-                        Ver todas las notificaciones
-                    </button>
-                </div>
             </ul>
         </li>
 
