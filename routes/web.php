@@ -29,7 +29,7 @@ Route::resource('categories', CategoryController::class);
 Route::resource('contacto', ContactoController::class)->only(['index', 'store', 'enviar-formulario']);
 Route::resource('users', UserController::class);
 Route::get('/confirmar-suscripcion/{token}', [SuscripcionController::class, 'confirmSuscription']);
-Route::get('notification/{notification}/{postId}', [NotificationController::class, 'show'])->name('notifications.show');
+Route::get('notification/{notification}/{postId}', [NotificationController::class, 'show'])->name('notifications.show')->middleware(['auth', 'check.notification']);
 Route::delete('comentarios/{comentario}', [ComentarioController::class, 'destroy'])->name('comentario.destroy');
 
 Route::middleware([
