@@ -9,6 +9,11 @@ class SearchPosts extends Component
 {
     public $search = "";
 
+    public function resetSearch ()
+    {
+        $this->reset();
+    }
+
     public function render()
     {
         $results = [];

@@ -22,7 +22,10 @@
 </head>
 <body data-bs-theme="dark">
 <div id="app">
-    <nav class="navbar navbar-expand-md shadow-sm">
+    <nav class="navbar navbar-expand-md shadow-sm d-flex flex-column">
+        <div class="col-8 d-flex justify-content-center" style="height: 13rem" onclick="window.location.href='/'">
+            <img src="https://st4.depositphotos.com/2762924/29189/i/450/depositphotos_291897976-stock-photo-water-drops-on-a-green.jpg" class="img-fluid" style="width: 100%; height: 20vh; cursor: pointer">
+        </div>
         <div class="container">
             <button onclick="cambiarTema()" class="btn rounded-fill"><i id="dl-icon" class="bi bi-sun-fill"></i>
             </button>
