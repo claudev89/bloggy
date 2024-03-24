@@ -1,22 +1,24 @@
 <div>
+
     @auth
         @php($user = \App\Models\User::find(auth()->id()))
-        @php($notifications = \App\Models\Notification::forUser($user->id)->latest()->get())
-
         <li class="nav-item dropdown mt-1" id="notificaciones">
-            <button class="btn btn-dark- dropdown-toggle" data-bs-toggle="dropdown"
+
+            <button class="btn btn-dark- dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside"
                     aria-expanded="false">
                 <i class="bi bi-bell-fill"></i>
                 @if($notifications->count()>0)
                     @if($notifications->where('read', 0)->count()>0)
+                        @php($notificationsCount = \App\Models\Notification::forUser(auth()->id())->count())
                         <span
                             class="position-absolute top-0 start-90 translate-middle badge rounded-pill bg-danger">
-                                                    {{ $notifications->where('read', 0)->count() }}
+                                                    {{ $notificationsCount }}
                                                 </span>
                     @endif
                 @endif
             </button>
-            <ul class="dropdown-menu dropdown-menu-dark pe-1" style="width: 22rem; max-height: 88rem; overflow-y: auto; overflow-x: hidden">
+
+            <ul class="dropdown-menu dropdown-menu-dark pe-1" style="width: 22rem; max-height: 48rem; overflow-y: auto; overflow-x: hidden" wire:ignore.self>
 
                 @php($action = "")
                 @php($element = "")
@@ -83,8 +85,8 @@
 
                         @else
                     @endif
-                    <li><a class="dropdown-item p-0 bg-" href="#">
-                            <div wire:key="{{$notification->id}}"
+                    <li><a class="dropdown-item p-0 bg-" href="#" wire:key="{{$notification->id}}">
+                            <div
                                 class="card p-0 ist-group-item list-group-item-action {{ $notification->read === 0 ? 'bg-secondary border-dark' :''}}">
                                 <div class="card-body p-1">
                                     <a href="#">
@@ -114,8 +116,14 @@
                     <p class="alert alert-dark">No tienes notificaciones.<p/>
                 @endforelse
 
+                    @if($hasMoreNotifications)
+
+                    @endif
+
             </ul>
         </li>
 
     @endauth
+
+
 </div>

@@ -23,7 +23,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Relation::enforceMorphMap([
             'c' => 'App\Models\Comentario',
-            'p' => 'App\Models\Post'
+            'p' => 'App\Models\Post',
+            'notification' => 'App\Models\Notification',
         ]);
 
         Paginator::useBootstrapFive();
