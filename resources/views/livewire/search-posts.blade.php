@@ -1,8 +1,8 @@
 <div>
     <form class="d-flex mb-1" role="search">
         <div class="input-group">
+            <input wire:model.live.debounce.500ms="search" wire:keydown.esc="resetSearch" class="form-control" type="search" placeholder="Buscar" aria-label="Search">
             <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
-            <input wire:model.live.debounce.500ms="search"  class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
         </div>
     </form>
     @if(sizeof($posts) > 0)
