@@ -333,31 +333,6 @@ return [
             'icon'        => 'far fa-fw fa-file',
             'label'       => null,
             'label_color' => 'success',
-            'submenu'       => [
-                [
-                    'text'      => 'Crear post',
-                    'url'       => 'posts/create',
-                ],
-                [
-                    'text'      => 'Mis posts',
-                    'url'       => 'posts/misposts',
-                ],                [
-                    'text'      => 'Mis borradores',
-                    'url'       => 'posts/misborradores',
-                ],
-                [
-                'text'      => 'Posts activos',
-                'url'       => 'admin/posts-activos',
-                ],
-                [
-                    'text'      => 'Borradores',
-                    'url'       => 'admin/posts-borradores',
-                ],
-                [
-                    'text'      => 'Categorías',
-                    'url'       => 'admin/categories',
-                ],
-                ],
         ],
         [
             'text'        => 'Usuarios',

@@ -32,6 +32,8 @@ Route::get('/confirmar-suscripcion/{token}', [SuscripcionController::class, 'con
 Route::get('notification/{notification}/{postId}', [NotificationController::class, 'show'])->name('notifications.show')->middleware(['auth', 'check.notification']);
 Route::delete('comentarios/{comentario}', [ComentarioController::class, 'destroy'])->name('comentario.destroy');
 
+Route::view('/admin/posts', 'admin.posts');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

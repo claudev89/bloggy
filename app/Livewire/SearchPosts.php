@@ -18,7 +18,7 @@ class SearchPosts extends Component
     {
         $results = [];
 
-        if(strlen($this->search >= 1)) {
+        if(strlen($this->search) >= 3) {
             $results = Post::where('titulo', 'like', '%'.$this->search.'%')->limit(10)->get();
         }
         return view('livewire.search-posts', ['posts' => $results]);
