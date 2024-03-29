@@ -23,6 +23,13 @@ class AdminPosts extends Component
         $this->sortBy = $sortByField;
     }
 
+    public function deletePost(Post $post)
+    {
+        $postTitle = $post->titulo;
+        $post->delete();
+        session()->flash('deleted', 'el post '.$postTitle.' se ha eliminado correctamente.');
+    }
+
     public function updateSearch() {
         $this->resetPage();
     }
