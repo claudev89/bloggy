@@ -25,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
             'c' => 'App\Models\Comentario',
             'p' => 'App\Models\Post',
             'notification' => 'App\Models\Notification',
+            'category' => 'App\Models\Category',
+            'tag' => 'App\Models\Tag',
         ]);
 
         Paginator::useBootstrapFive();

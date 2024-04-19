@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+    @auth
+        <div class="ms-auto mb-2">
+            <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#createPost"><i class="bi bi-plus"></i> Agregar post</button>
+            <livewire:admin.createPost />
+        </div>
+    @endauth
     @if(session()->has('suscrito'))
         <div class="alert alert-success" role="alert">{{ session('suscrito') }}</div>
     @endif
@@ -9,11 +15,18 @@
     @endif
     @php($posts = \App\Models\Post::where('borrador', 0)->orderBy('created_at', 'desc')->paginate(15))
     @foreach($posts as $post)
+
+        @if(Str::startsWith($post->image, 'http'))
+            @php($image = $post->image)
+        @else
+            @php($image = asset('storage/'.$post->image))
+        @endif
+
         @php($fechaPost = \Carbon\Carbon::parse($post->created_at))
         <div class="card mb-2 mt-2">
             <div class="row g-0">
                 <div class="col-md-4">
-                    <a href="{{ route('posts.show', $post) }}"><img src="{{ $post->image }}" class="img-fluid rounded" alt="{{ $post->titulo }}"></a>
+                    <a href="{{ route('posts.show', $post) }}"><img src="{{ $image }}" class="img-fluid rounded" alt="{{ $post->titulo }}"></a>
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">

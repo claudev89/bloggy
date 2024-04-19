@@ -1,12 +1,16 @@
 @php($postsOrderByDate = \App\Models\Post::where('borrador', 0)->orderBy('created_at', 'desc')->take(3)->get())
 @php($postsOrderByPopularity = \App\Models\Post::where('borrador', 0)->orderBy('views', 'desc')->take(3)->get())
 @php($postsOrderRandomOrder = \App\Models\Post::where('borrador', 0)->inRandomOrder()->take(3)->get())
+    @php($tags = \App\Models\Tag::withCount('posts')->orderByDesc('posts_count')->get())
 
     <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    @stack('css')
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -17,7 +21,10 @@
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
+
     <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body data-bs-theme="dark">
@@ -150,7 +157,7 @@
                             <div class="card mb-2" style="max-width: 540px;">
                                 <div class="row g-0">
                                     <div class="col-md-4 mt-2 mb-2">
-                                        <a href="{{ route('posts.show', $post) }}"><img src="{{ $post->image }}"
+                                        <a href="{{ route('posts.show', $post) }}"><img src="{{ Str::startsWith($post->image, 'http') ? $post->image: asset('storage/' . $post->image) }}"
                                                                                         class="img-fluid rounded-start h-100"
                                                                                         alt="{{ $post->description }}"></a>
                                     </div>
@@ -174,7 +181,7 @@
                             <div class="card mb-2" style="max-width: 540px;">
                                 <div class="row g-0">
                                     <div class="col-md-4 mt-2 mb-2">
-                                        <a href="{{ route('posts.show', $post) }}"><img src="{{ $post->image }}"
+                                        <a href="{{ route('posts.show', $post) }}"><img src="{{ Str::startsWith($post->image, 'http') ? $post->image: asset('storage/' . $post->image) }}"
                                                                                         class="img-fluid rounded-start h-100"
                                                                                         alt="{{ $post->description }}"></a>
                                     </div>
@@ -198,7 +205,7 @@
                             <div class="card mb-2" style="max-width: 540px;">
                                 <div class="row g-0">
                                     <div class="col-md-4 mt-2 mb-2">
-                                        <a href="{{ route('posts.show', $post) }}"><img src="{{ $post->image }}"
+                                        <a href="{{ route('posts.show', $post) }}"><img src="{{ Str::startsWith($post->image, 'http') ? $post->image: asset('storage/' . $post->image) }}"
                                                                                         class="img-fluid rounded-start h-100"
                                                                                         alt="{{ $post->description }}"></a>
                                     </div>
@@ -237,6 +244,13 @@
                     <li><a style="color: inherit" class="text-decoration-none" href="{{ route('contacto.index') }}">Contacto</a>
                     </li>
                 </ul>
+                <strong>Etiquetas:</strong><br>
+                <div>
+                    @foreach($tags as $tag)
+                        <a href="" class="btn btn-secondary btn-sm mb-1 rounded-pill">{{ $tag->name }}</a>
+                    @endforeach
+                </div>
+
             </div>
             <!-- Fin de la barra latetal derecha -->
         </div>
@@ -260,6 +274,8 @@
 </div>
 </div>
 </body>
+
+@stack('js')
 
 <script>
     const temaOscuro = () => {

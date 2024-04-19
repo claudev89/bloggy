@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\SuscripcionController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ComentarioController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,10 @@ Route::get('notification/{notification}/{postId}', [NotificationController::clas
 Route::delete('comentarios/{comentario}', [ComentarioController::class, 'destroy'])->name('comentario.destroy');
 
 Route::view('/admin/posts', 'admin.posts');
+Route::view('/admin/posts/create', 'admin.posts-create')->name('admin.posts.create');
+
+Route::post('/upload', [HomeController::class, 'upload'])
+    ->name('summernote.upload');
 
 Route::middleware([
     'auth:sanctum',
