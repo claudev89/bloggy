@@ -21,8 +21,23 @@
     </div>
 
     <p>{{ $post->description }}</p>
-    <img src="{{ $post->image }}" class="mb-3">
-    <p>{{ $post->body }}</p>
+
+    @if(Str::startsWith($post->image, 'http'))
+        <img src="{{ $post->image }}" />
+    @else
+        <img src="{{ asset('storage/'.$post->image) }}" />
+    @endif
+
+    <p>{!! $post->body !!}</p>
+
+    @if(count($post->tags) > 0)
+        <strong>Etiquetas: </strong>
+    @endif
+    <div>
+        @foreach($post->tags as $tag)
+            <a href=""><span class="badge text-bg-secondary">{{ $tag->name }}</span></a>
+        @endforeach
+    </div>
 
     <livewire:PostComments :key="'comments-'.$post->id" :$post :comments="$post->comments"/>
 

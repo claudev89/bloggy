@@ -9,6 +9,12 @@
 @section('content')
     <p>Acá puedes administrar los posts tuyos y de los usuarios.</p>
 
+    <div class="d-flex flex-row-reverse mx-5">
+        <a class="btn btn-primary" href="{{ route('admin.posts.create') }}">
+            <i class='far fa-fw fa-plus-square'></i> Crear Post
+        </a>
+    </div>
+
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="my-posts-tab" data-toggle="tab" data-target="#my-posts" type="button" role="tab" aria-controls="home" aria-selected="true">Mis Posts</button>
@@ -17,7 +23,7 @@
             <button class="nav-link" id="users-posts-tab" data-toggle="tab" data-target="#users-posts" type="button" role="tab" aria-controls="profile" aria-selected="false">Posts de Usuarios</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="categories-tab" data-toggle="tab" data-target="#categories" type="button" role="tab" aria-controls="contact" aria-selected="false">Categorías</button>
+            <button class="nav-link" id="categories-tab" data-toggle="tab" data-target="#categories" type="button" role="tab" aria-controls="categories" aria-selected="false">Categorías</button>
         </li>
     </ul>
     <div class="tab-content" id="myTabContent">

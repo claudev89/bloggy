@@ -1,7 +1,7 @@
 <div>
-    <form class="d-flex mb-1" role="search">
+    <form class="d-flex mb-1" role="search" wire:submit.prevent>
         <div class="input-group">
-            <input wire:model.live.debounce.500ms="search" wire:keydown.esc="resetSearch" class="form-control" type="search" placeholder="Buscar" aria-label="Search">
+            <input wire:model.live.debounce.300ms="search" wire:keydown.esc="resetSearch" class="form-control" type="search" placeholder="Buscar" aria-label="Search">
             <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
         </div>
     </form>
