@@ -11,11 +11,16 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-floating mb-3">
-                        <input wire:model.live.debounce.300ms="titulo" type="text" class="form-control @error('titulo') is-invalid @else is-valid @enderror" id="titulo" placeholder="Título del Post">
+                        <input wire:model.live.debounce.300ms="titulo" type="text" class="form-control @error('titulo') is-invalid @else is-valid @enderror" id="titulo" placeholder="Título del Post" maxlength="100">
                         <label for="title">Título del post</label>
-                        @error('titulo')
-                            <span class="alert alert-danger small p-1">{{ $message }}</span>
-                        @enderror
+                        <div class="d-flex">
+                            <div class="w-100">
+                                @error('titulo')
+                                <span class="d-inline-flex alert alert-danger small p-1">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <span class="d-flex small text-secondary text-end ms-2 flex-shrink-1">{{ strlen($titulo) }}/100</span>
+                        </div>
                     </div>
                     <div class="form-floating mb-3">
                         Categorías <br>
@@ -37,9 +42,14 @@
                         @error('selectedCategories') <span class="small pt-1 alert alert-danger">{{ $message }}</span> @enderror
                     </div>
                     <div class="form-floating mb-3">
-                        <textarea wire:model.live.debounce.400ms="description" class="form-control @error('description') is-invalid @else is-valid @enderror" id="description" placeholder="Descripción" style="height: 100px"></textarea>
+                        <textarea wire:model.live.debounce.400ms="description" class="form-control @error('description') is-invalid @else is-valid @enderror" id="description" placeholder="Descripción" minlength="50" maxlength="500" style="height: 100px"></textarea>
                         <label for="description">Texto breve</label>
-                        @error('description') <span class="alert alert-danger small p-1">{{ $message }}</span> @enderror
+                        <div class="d-flex">
+                            <div class="w-100">
+                                @error('description') <span class="alert alert-danger small p-1">{{ $message }}</span> @enderror
+                            </div>
+                            <span class="d-flex small text-secondary text-end ms-2 flex-shrink-1">{{ strlen($description) }}/500</span>
+                        </div>
                     </div>
                     <div class="form-floating mb-3">
                         <input wire:model="image" accept="image/png, image/jpeg" type="file" class="form-control  @error('image') is-invalid @else is-valid @enderror" id="image">
@@ -72,7 +82,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#postPreview" wire:click="createPost" @if($errors->count() > 0) disabled @endif >Vista Previa</button>
+                    <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#postPreview" wire:click="createPost" @if(count($errors) > 0) disabled @endif >Vista Previa</button>
                 </div>
             </div>
         </div>
@@ -87,12 +97,18 @@
                 </div>
                 <div class="modal-body">
                     {{ $post?->description }} <br>
-                    <strong>Categorías: </strong> @foreach($selectedCategories as $cat) {{ $availableCategories->firstWhere('id', $cat)->name }} @if(!$loop->last) ,  @endif @endforeach
+                    <strong>Categorías: </strong> @foreach($selectedCategories as $cat) {{ $availableCategories->firstWhere('id', $cat)->name }} @if(!$loop->last) ,  @endif @endforeach <br>
                     @if(isset($post->image))
                         <img src="{{ asset('storage/'.$post?->image) }}" class="img-fluid" /> <br>
                     @endif
                     {!! $post?->body !!} <br>
-                    <strong>Etiquetas: </strong> @foreach($selectedTags as $eti) <span class="badge text-bg-secondary">{{ $tags->firstWhere('id', $eti)->name }}</span> @endforeach
+                    <strong>Etiquetas: </strong>
+{{--                    @foreach($selectedTags as $eti)--}}
+{{--                        @php($tag = $tags->first(function ($tag) use ($eti) { return $tag->id == $eti; }))--}}
+{{--                        @if($tag)--}}
+{{--                            <span class="badge text-bg-secondary">{{ $tag->name }}</span>--}}
+{{--                        @endif--}}
+{{--                        @endforeach--}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#createPost">Editar</button>
@@ -143,18 +159,39 @@
                         @this.dispatch('sc-changed');
                     });
 
+
                     $('#tags').select2({
                         dropdownParent: $('#createPost'),
                         placeholder: 'Seleccione las etiquetas del post',
                         width: "100%",
-                    });
+                        tags: true,
+                        tokenSeparators: [',', ' '],
+                        createTag: function (params) {
+                            return {
+                                id: params.term,
+                                text: params.term,
+                                newTag: true
+                            }
+                        }
+                    }).on('select2:select', function (e) {
+                    @this.dispatch('sc-changed');
 
-                    $('#tags').on('change', function (e) {
-                        @this.selectedTags = $(this).val();
-                        @this.dispatch('sc-changed');
-                        console.log(@this.selectedTags);
+                    var tagName = e.params.data.text;
+                    var tagId = e.params.data.id;
+                    if (tagId) {
+                        @this.tagSelected(tagName);
+                    @this.dispatch('sc-changed');
+                    } else {
+                        @this.set('selectedTags', $('#tags').val());
+                    @this.dispatch('sc-changed');
+                    }
+
+                    }).on('select2:unselect', function (e) {
+                    @this.dispatch('sc-changed');
+                        @this.set('selectedTags', $('#tags').val());
                     });
                 });
+
 
             </script>
         @endpush
