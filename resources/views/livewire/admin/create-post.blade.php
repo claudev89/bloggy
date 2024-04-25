@@ -96,19 +96,18 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    {{ $post?->description }} <br>
+                    <p>{{ $post?->description }}</p>
                     <strong>Categorías: </strong> @foreach($selectedCategories as $cat) {{ $availableCategories->firstWhere('id', $cat)->name }} @if(!$loop->last) ,  @endif @endforeach <br>
                     @if(isset($post->image))
                         <img src="{{ asset('storage/'.$post?->image) }}" class="img-fluid" /> <br>
                     @endif
                     {!! $post?->body !!} <br>
                     <strong>Etiquetas: </strong>
-{{--                    @foreach($selectedTags as $eti)--}}
-{{--                        @php($tag = $tags->first(function ($tag) use ($eti) { return $tag->id == $eti; }))--}}
-{{--                        @if($tag)--}}
-{{--                            <span class="badge text-bg-secondary">{{ $tag->name }}</span>--}}
-{{--                        @endif--}}
-{{--                        @endforeach--}}
+                    @if($post)
+                        @foreach($post->tags as $tag)
+                            <span class="badge text-bg-secondary">{{ $tag->name }}</span>
+                        @endforeach
+                    @endif
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#createPost">Editar</button>
