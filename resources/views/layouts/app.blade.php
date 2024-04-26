@@ -247,7 +247,7 @@
                 <strong>Etiquetas:</strong><br>
                 <div>
                     @foreach($tags as $tag)
-                        <a href="" class="btn btn-secondary btn-sm mb-1 rounded-pill">{{ $tag->name }}</a>
+                        <a href="{{route('tag.show', $tag->name)}}" class="btn btn-secondary btn-sm mb-1 rounded-pill">{{ $tag->name }}</a>
                     @endforeach
                 </div>
 

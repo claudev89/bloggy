@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 
 class TagController extends Controller
@@ -33,9 +35,12 @@ class TagController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $name)
     {
-        //
+        $tag = Tag::Where('name', $name)->first();
+        $posts = $tag->posts()->where('borrador', 0)->orderBy('created_at', 'DESC')->paginate(15);
+
+        return view('welcome', ['posts' => $posts, 'tagName' => $tag->name]);
     }
 
     /**
