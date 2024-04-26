@@ -35,7 +35,7 @@
     @endif
     <div>
         @foreach($post->tags as $tag)
-            <a href=""><span class="badge text-bg-secondary">{{ $tag->name }}</span></a>
+            <a href="{{ route('tag.show', $tag->name) }}"><span class="badge text-bg-secondary">{{ $tag->name }}</span></a>
         @endforeach
     </div>
 

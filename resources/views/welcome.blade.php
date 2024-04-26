@@ -13,7 +13,11 @@
     @if(session()->has('noSuscrito'))
         <div class="alert alert-danger" role="alert">{{ session('noSuscrito') }}</div>
     @endif
-    @php($posts = \App\Models\Post::where('borrador', 0)->orderBy('created_at', 'desc')->paginate(15))
+    @if(!isset($posts))
+        @php($posts = \App\Models\Post::where('borrador', 0)->orderBy('created_at', 'desc')->paginate(15))
+    @else
+        <h4>Etiqueta: {{$tagName}}</h4>
+    @endif
     @foreach($posts as $post)
 
         @if(Str::startsWith($post->image, 'http'))

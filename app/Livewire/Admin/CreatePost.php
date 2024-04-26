@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\Post;
 use App\Models\Tag;
+use Illuminate\Support\Arr;
 use Livewire\Attributes\On;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Validate;
@@ -36,7 +37,6 @@ class CreatePost extends ModalComponent
     public $body;
 
     public $post;
-
     public function rules()
     {
         return [
@@ -52,15 +52,29 @@ class CreatePost extends ModalComponent
     public function messages()
     {
         return [
-          //
+            'selectedCategories' => 'Seleccione al menos una categoría y 3 como máximo.',
+            'selectedTags' => 'Agregue etiquetas a su publicación',
+            'image.required' => 'Suba una imagen de portada para su publicación',
+            'image.image' => 'Seleccione un archivo de imagen válido',
+            'image.max' => 'La imagen no puede sobrepasar los 8 MB',
+            'titulo.required' => 'Escriba un título para su publicación',
+            'titulo.max' => 'El título no puede sobrepasar los 100 caracteres de largo',
+            'titulo.unique' => 'Ya existe una publicación con ese título',
+            'description.required' => 'Escriba una descripción breve para su post (máximo 500 caracteres)',
+            'description.min' => 'La descripción no puede contener menos de 50 caracteres',
+            'description.max' => 'La descripción no puede ser de más de 500 caracteres de largo',
+            'body.required' => 'Escriba el cuerpo de su publicación.',
         ];
     }
-
 
     public function mount()
     {
         $this->availableCategories = Category::all();
         $this->tags = Tag::all();
+        if($this->post) {
+            $this->selectedTags = $this->post->tags->pluck('id')->toArray();
+        }
+
         $this->validate();
     }
 
@@ -71,12 +85,21 @@ class CreatePost extends ModalComponent
         }
     }
 
-
     #[On('sc-changed')]
-    public function validar()
+    public function validateCategoriesTags()
     {
         $this->validate();
     }
+
+    public function tagSelected($tagName)
+    {
+        $tag = Tag::firstOrCreate(['name' => $tagName]);
+
+        if (!in_array($tag->id, $this->selectedTags)) {
+            $this->selectedTags[] = $tag->id;
+        }
+    }
+
 
     public function createPost()
     {
@@ -89,12 +112,10 @@ class CreatePost extends ModalComponent
                 'body' => $this->body,
             ]);
             // Eliminar categorías anteriores y agregar categorías nuevas
-            $this->post->categories()->detach();
-            $this->post->categories()->attach($this->selectedCategories);
+            $this->post->categories()->sync($this->selectedCategories);
 
             // Eliminar etiquetas anteriores y agregar etiquetas nuevas
-            $this->post->tags()->detach();
-            $this->post->tags()->attach($this->selectedTags);
+            $this->post->tags()->sync($this->selectedTags);
         }
         else
         {
@@ -110,7 +131,7 @@ class CreatePost extends ModalComponent
             // Agregar Categorías
             $this->post->categories()->attach($this->selectedCategories);
             // Agregar Etiquetas
-            $this->post->tags()->attach($this->selectedTags);
+            $this->post->tags()->sync($this->selectedTags);
         }
     }
 
@@ -120,8 +141,6 @@ class CreatePost extends ModalComponent
         $this->post->save();
         return redirect()->to('/');
     }
-
-
 
     public function render()
     {

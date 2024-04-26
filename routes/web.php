@@ -39,6 +39,8 @@ Route::view('/admin/posts/create', 'admin.posts-create')->name('admin.posts.crea
 Route::post('/upload', [HomeController::class, 'upload'])
     ->name('summernote.upload');
 
+Route::get('/tag/{tag}', [TagController::class, 'show'])->name('tag.show');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
