@@ -16,7 +16,12 @@
     @if(!isset($posts))
         @php($posts = \App\Models\Post::where('borrador', 0)->orderBy('created_at', 'desc')->paginate(15))
     @else
-        <h4>Etiqueta: {{$tagName}}</h4>
+        @if(isset($tagName))
+            <h4>Etiqueta: {{$tagName}}</h4>
+        @endif
+        @if(isset($categoryName))
+            <h4>Categoría: {{ $categoryName }}</h4>
+        @endif
     @endif
     @foreach($posts as $post)
 
@@ -74,7 +79,9 @@
         </div>
     @endforeach
 
-    {{ $posts->links() }}
+    @if(!isset($categoryName))
+        {{ $posts->links() }}
+    @endif
 
     <hr>
     <div class="container">

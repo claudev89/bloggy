@@ -53,15 +53,15 @@
                     @foreach($categories as $category)
                         @if($category->subcategory->isNotEmpty())
                             <li class="nav-item dropdown"
-                                onclick="window.location.href='{{ route('categories.show', $category) }}'">
-                                <a class="nav-link dropdown-toggle" href="{{ route('categories.show', $category) }}"
+                                onclick="window.location.href='{{ route('categories.show', $category->name) }}'">
+                                <a class="nav-link dropdown-toggle" href="{{ route('categories.show', $category->name) }}"
                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     {{ $category->name }}
                                 </a>
                                 <ul class="dropdown-menu">
                                     @foreach($category->subcategory as $subcategory)
                                         <li><a class="dropdown-item"
-                                               href="{{ route('categories.show', $subcategory) }}">{{ $subcategory->name }}</a>
+                                               href="{{ route('categories.show', $subcategory->name) }}">{{ $subcategory->name }}</a>
                                         </li>
                                     @endforeach
                                 </ul>
@@ -69,7 +69,7 @@
                         @else
                             <li class="nav-item">
                                 <a class="nav-link"
-                                   href="{{ route('categories.show', $category) }}">{{ $category->name }}</a>
+                                   href="{{ route('categories.show', $category->name) }}">{{ $category->name }}</a>
                             </li>
                         @endif
                     @endforeach
