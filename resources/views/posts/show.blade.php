@@ -9,10 +9,10 @@
             <li class="breadcrumb-item"><a href="/">Inicio</a></li>
             @if( $post->categories->first()->parentCategory )
                 <li class="breadcrumb-item">
-                    <a href="{{ route('categories.show', $post->categories->first()->parent_category) }}">{{ $post->categories->first()->parent_category->name }}</a>
+                    <a href="{{ route('categories.show', $post->categories->first()->parent_category->name) }}">{{ $post->categories->first()->parent_category->name }}</a>
                 </li>
             @endif
-            <li class="breadcrumb-item active" aria-current="page">{{$post->categories->first()->name }}</li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="{{ route('categories.show', $post->categories->first()->name) }}">{{$post->categories->first()->name }}</a> </li>
         </ol>
     </nav>
 

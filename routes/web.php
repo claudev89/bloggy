@@ -26,7 +26,7 @@ Route::get('/', [CategoryController::class, 'index']);
 
 Route::resource('posts', PostController::class);
 Route::resource('tags', TagController::class)->except(['index', 'show']);
-Route::resource('categories', CategoryController::class);
+Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
 Route::resource('contacto', ContactoController::class)->only(['index', 'store', 'enviar-formulario']);
 Route::resource('users', UserController::class);
 Route::get('/confirmar-suscripcion/{token}', [SuscripcionController::class, 'confirmSuscription']);
@@ -36,8 +36,8 @@ Route::delete('comentarios/{comentario}', [ComentarioController::class, 'destroy
 Route::view('/admin/posts', 'admin.posts');
 Route::view('/admin/posts/create', 'admin.posts-create')->name('admin.posts.create');
 
-Route::post('/upload', [HomeController::class, 'upload'])
-    ->name('summernote.upload');
+//Route::post('/upload', [HomeController::class, 'upload'])
+//    ->name('summernote.upload');
 
 Route::get('/tag/{tag}', [TagController::class, 'show'])->name('tag.show');
 

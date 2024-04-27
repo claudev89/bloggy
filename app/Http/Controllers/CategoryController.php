@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -35,9 +36,15 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
+    public function show(string $categoryName)
     {
-        return view('categories.show', ['category' => $category]);
+        $category = Category::where('name', $categoryName)->first();
+        $childCategories = Category::where('parentCategory', $category->id)->get();
+        $posts = $category->posts()->where('borrador', 0)->orderBy('created_at', 'desc')->get();
+        foreach ($childCategories as $childCategory) {
+            $posts = $posts->merge($childCategory->posts()->where('borrador', 0)->orderBy('created_at', 'desc')->get());
+        }
+        return view('welcome', ['posts' => $posts, 'categoryName' => $categoryName]);
     }
 
     /**
