@@ -6,7 +6,8 @@ use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
-use MongoDB\Driver\Session;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class PostController extends Controller
 {
@@ -42,9 +43,13 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        $isAuthor = false;
+        if( auth()->check()) {
+            $isAuthor = Auth::user()->id === $post->autor;
+        }
         $post->views++;
         $post->save();
-        return view('posts.show', ['post' => $post]);
+        return view('posts.show', ['post' => $post, 'isAuthor' => $isAuthor]);
     }
 
     /**
@@ -73,8 +78,8 @@ class PostController extends Controller
 
         $post->delete();
 
-        Session::flash('mensaje', "Se ha eliminado el post '$tituloPostEliminado'.");
+        Session::flash('deletedPost', "Se ha eliminado el post <strong>". $tituloPostEliminado."</strong>");
 
-        return redirect()->route('post.index');
+        return redirect('/');
     }
 }

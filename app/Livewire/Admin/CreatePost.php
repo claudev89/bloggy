@@ -39,10 +39,15 @@ class CreatePost extends ModalComponent
     public $post;
     public function rules()
     {
+        if($this->post) {
+            $imageRules = ['required'];
+        } else {
+            $imageRules = ['required', 'image', 'max:8192'];
+        }
         return [
             'selectedCategories' => ['required', ],
             'selectedTags' => ['required', ],
-            'image' => ['required', 'image', 'max:8192'],
+            'image' => $imageRules,
             'titulo' => ['required', 'max:100', Rule::unique('posts')->ignore($this->post), ],
             'description' => 'min:50|max:500|required',
             'body' => 'required',
@@ -75,6 +80,19 @@ class CreatePost extends ModalComponent
             $this->selectedTags = $this->post->tags->pluck('id')->toArray();
         }
 
+        if($this->post) {
+            $this->titulo = $this->post->titulo;
+            foreach ($this->post->categories as $category) {
+                $this->selectedCategories[] = $category->id;
+            }
+            $this->description = $this->post->description;
+            $this->image = $this->post->image;
+            $this->body = $this->post->body;
+            foreach ($this->post->tags as $tag) {
+                $this->selectedTags[] = $tag->id;
+            }
+        }
+
         $this->validate();
     }
 
@@ -105,12 +123,17 @@ class CreatePost extends ModalComponent
     {
         $this->validate();
         if($this->post) {
-            $this->post->update([
+            $updateData = [
                 'titulo' => $this->titulo,
                 'description' => $this->description,
-                'image' => $this->image->store('uploads', 'public'),
                 'body' => $this->body,
-            ]);
+            ];
+
+            if($this->image instanceof \Illuminate\Http\UploadedFile) {
+                $updateData['image'] = $this->image->store('uploads', 'public');
+            }
+            $this->post->update($updateData);
+            
             // Eliminar categorías anteriores y agregar categorías nuevas
             $this->post->categories()->sync($this->selectedCategories);
 
