@@ -1,6 +1,18 @@
 @extends('layouts.app')
 
+@if(session()->has('deletedPost'))
+    <div class="toast show fade text-bg-success position-fixed bottom-0 end-0 mb-2 me-2 z-3" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000" id="sMessage">
+        <div class="d-flex">
+            <div class="toast-body">
+                {!! session('deletedPost') !!}
+            </div>
+            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+@endif
+
 @section('content')
+
     @auth
         <div class="ms-auto mb-2">
             <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#createPost"><i class="bi bi-plus"></i> Agregar post</button>
@@ -13,6 +25,7 @@
     @if(session()->has('noSuscrito'))
         <div class="alert alert-danger" role="alert">{{ session('noSuscrito') }}</div>
     @endif
+
     @if(!isset($posts))
         @php($posts = \App\Models\Post::where('borrador', 0)->orderBy('created_at', 'desc')->paginate(15))
     @else

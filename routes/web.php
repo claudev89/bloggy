@@ -32,6 +32,7 @@ Route::resource('users', UserController::class);
 Route::get('/confirmar-suscripcion/{token}', [SuscripcionController::class, 'confirmSuscription']);
 Route::get('notification/{notification}/{postId}', [NotificationController::class, 'show'])->name('notifications.show')->middleware(['auth', 'check.notification']);
 Route::delete('comentarios/{comentario}', [ComentarioController::class, 'destroy'])->name('comentario.destroy');
+Route::delete('posts/{post}', [PostController::class, 'destroy'])->name('post.destroy');
 
 Route::view('/admin/posts', 'admin.posts');
 Route::view('/admin/posts/create', 'admin.posts-create')->name('admin.posts.create');

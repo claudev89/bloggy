@@ -2,7 +2,46 @@
 
 @section('content')
 
-    <h2 class="text-uppercase" xmlns="http://www.w3.org/1999/html">{{ $post->titulo }}</h2>
+    <div class="d-flex">
+        <h2 class="text-uppercase flex-grow-1" xmlns="http://www.w3.org/1999/html">{{ $post->titulo }}</h2>
+        @if($isAuthor)
+            <div class="dropdown">
+                <a href="#" role="button" id="dropdownPost" data-bs-toggle="dropdown" aria-expanded="false" style="color: inherit">
+                    <i class="bi bi-three-dots-vertical"></i>
+                </a>
+
+                <livewire:admin.create-post :post="$post" />
+
+                <ul class="dropdown-menu" aria-labelledby="dropdownPost">
+                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#createPost"><i class="bi bi-pencil-square"></i> Editar</a></li>
+                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deletePost"><i class="bi bi-trash"></i> Eliminar</a></li>
+                </ul>
+            </div>
+
+            <div class="modal fade" id="deletePost" tabindex="-1" aria-labelledby="deletePost" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Eliminar Post</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Está seguro que desea eliminar el post <b>{{ $post->titulo }}</b>?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <form action="{{ route('post.destroy', $post) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> Eliminar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        @endif
+    </div>
 
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">

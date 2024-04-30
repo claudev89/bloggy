@@ -25,7 +25,7 @@
                     <div class="form-floating mb-3">
                         Categorías <br>
                         <div wire:ignore class="mb-2">
-                            <select wire:key="categories" class="categorySelect" aria-label="Seleccione un máximo de tres categorías" id="categories" style="width: 100%"; multiple>
+                            <select wire:key="categories" wire:model="selectedCategories" class="categorySelect" aria-label="Seleccione un máximo de tres categorías" id="categories" style="width: 100%"; multiple>
                                 <option></option>
                                 @foreach($availableCategories as $category)
                                     @if(is_null($category->parentCategory))
@@ -55,8 +55,10 @@
                         <input wire:model="image" accept="image/png, image/jpeg" type="file" class="form-control  @error('image') is-invalid @else is-valid @enderror" id="image">
                         <label for="imagen">Imagen principal del post</label>
                         @error('image') <span class="small p-1 alert alert-danger">{{ $message }}</span> @enderror
-                        @if($image)
+                        @if(is_a($image, '\Illuminate\Http\UploadedFile'))
                             <img class="img-thumbnail w-25 h-auto mt-2" src="{{ $image->temporaryUrl() }}" />
+                        @elseif ($post && $post->image)
+                            <img class="img-thumbnail w-25 h-auto mt-2" src="{{ asset('storage/'.$post->image) }}" />
                         @endif
                         <div wire:loading wire:target="image">
                             <div class="spinner-border spinner-border-sm mt-2" role="status">
@@ -71,7 +73,7 @@
                     @error('body')<span class="small p-1 alert alert-danger">{{ $message }}</span>@enderror
                     <div class="form-floating mb-3" wire:ignore>
                         Etiquetas <br>
-                        <select wire:key="tags" class="" aria-label="Etiquetas" id="tags" style="width: 100%;" multiple="multiple">
+                        <select wire:key="tags" wire:model="selectedTags" class="" aria-label="Etiquetas" id="tags" style="width: 100%;" multiple="multiple">
                             <option></option>
                             @foreach($tags as $tag)
                                 <option value="{{ $tag->id }}">{{ $tag->name }}</option>
